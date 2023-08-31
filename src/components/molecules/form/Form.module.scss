@@ -24,12 +24,13 @@
       align-items: center;
       border-radius: 15px;
       transition: all 0.3s ease-in-out;
-      margin-right: 10px;
+      margin-right: 25px;
+      
       .input {
         border: none;
         // add border-radius to the first child
         height: 50px;
-        width: 30vw;
+        width: 25vw;
         border-radius: 15px;
         background-color: #3c3751;
         box-shadow: 9px 9px 9px rgba(89, 88, 88, 0.25);
