@@ -21,6 +21,9 @@ const Login = () => {
   console.log(fields);
   return (
     <div className={styles.login}>
+      <div className={styles.header}>
+        <h1>log in</h1>
+      </div>
       <div className={styles.imageContainer}>
         <img src={background} alt="imag" className={styles.image} />
       </div>
