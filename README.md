@@ -1,2 +1,3 @@
-# benkyo
-Discord like website for students
+# Benkyo
+
+## Discord like website for students
