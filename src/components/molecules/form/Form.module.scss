@@ -1,12 +1,66 @@
+// Form.module.scss
 
+.formContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
 
-.form {
+  // i want to have the buttons be all next to each other with a sligh border between them adn then the submit button to also be on the right but still touching them
+
+  .form {
+    position: absolute;
+    z-index: 999;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-.title {
-    color: white;
+    bottom: 100px;
+    padding-bottom: 10px;
+
+    .fieldContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+      transition: all 0.3s ease-in-out;
+      margin-right: 10px;
+      .input {
+        border: none;
+        // add border-radius to the first child
+        height: 50px;
+        width: 30vw;
+        border-radius: 15px;
+        background-color: #3c3751;
+        box-shadow: 9px 9px 9px rgba(89, 88, 88, 0.25);
+        color: white;
+        padding-left: 10px;
+        &::placeholder {
+          color: white;
+        }
+      }
+    }
+    .buttonContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      align-items: center;
+      border-radius: 15px;
+      background-color: #181621;
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        transform: scale(1.1);
+      }
+      .submitButton {
+        height: 52px;
+        width: 150px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        background-color: #ff5810;
+        color: white;
+      }
+    }
+  }
 }

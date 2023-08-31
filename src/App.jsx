@@ -1,11 +1,11 @@
-import React from 'react';
-import Benkyo from './components/organisms/benkyo/Benkyo';
 import './App.scss';
+import Login from './components/organisms/login/Login';
 
 const App = () => {
+
   return (
     <div id="App">
-      <Benkyo />
+      <Login />
     </div>
   );
 };
