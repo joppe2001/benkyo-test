@@ -1,12 +1,96 @@
+// Form.module.scss
+
+.formContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+
+  // i want to have the buttons be all next to each other with a sligh border between them adn then the submit button to also be on the right but still touching them
+  @import "../../../mixins/for-device.scss";
 
 
-.form {
+  .formContainer {
+    
+
+    
+  }
+  .form {
+    position: absolute;
+    z-index: 999;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-.title {
-    color: white;
+    bottom: 100px;
+    padding-bottom: 10px;
+    @include for-device(mobile) {
+      display: flex;
+      flex-direction: column;
+      bottom: 0;
+    }
+
+    .fieldContainer {
+      display: flex;
+      flex-direction: column;
+      border-radius: 15px;
+      transition: all 0.3s ease-in-out;
+      margin-right: 25px;
+
+      @include for-device(mobile) {
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+
+      .input {
+        border: none;
+        // add border-radius to the first child
+        height: 50px;
+        width: 25vw;
+        border-radius: 15px;
+        background-color: #3c3751;
+        box-shadow: 9px 9px 9px rgba(89, 88, 88, 0.25);
+        color: white;
+        padding-left: 10px;
+        &::placeholder {
+          color: white;
+        }
+
+        @include for-device(mobile) {
+          width: 80vw;
+        }
+      }
+    }
+    .buttonContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      align-items: center;
+      border-radius: 15px;
+      background-color: #181621;
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        transform: scale(1.05);
+      }
+      .submitButton {
+        height: 52px;
+        width: 150px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        transition: all 0.3s ease-in-out;
+        background-color: #ff5810;
+
+        &:hover {
+        background-color: #3c3751;
+
+        }
+
+        @include for-device(mobile) {
+          width: 70vw;
+        }
+      }
+    }
+  }
 }
