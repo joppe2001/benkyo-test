@@ -54,10 +54,16 @@ const Login = () => {
     } else {
       signup(data.email, data.password)
         .then(() => {
-          setMessage('You have successfully signed up!');
+            setMessage('You have successfully signed up!');
         })
         .catch(() => {
-          setMessage('Signup failed. Please try again.');
+          if (data.email.length === 0 || data.password.length === 0) {
+            setMessage('we need your email and password to sign you up');
+          } else if (data.password !== data.confirmPassword) {
+            setMessage('passwords do not match');
+          } else if (data.password.length < 6 || data.email.length < 10) {
+            setMessage('password and email must be at least 6/10 characters long');
+          }
         });
     }
   };
@@ -86,7 +92,6 @@ const Login = () => {
         onSubmit={handleAuth}
       />
       {message && <div className={styles.message}>{message}</div>}{' '}
-      {/* Render the message here */}
     </div>
   );
 };
