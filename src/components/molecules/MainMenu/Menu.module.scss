@@ -1,0 +1,18 @@
+.navContainer{
+    position: absolute;
+    color: white;
+    z-index: 999;
+
+    ul li {
+        list-style: none;
+        display: inline-block;
+        margin: 0 20px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: 500;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+            color: #e54b4b;
+        }
+    }
+}

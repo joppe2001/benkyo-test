@@ -3,12 +3,11 @@ import styles from './Menu.module.scss';
 const mainNav = () => {
     return(
     <div className={styles.navContainer}>
-        <div className={styles.leftSide}>
-            <p>Home</p>
-            <p>Communities</p>
-            <p>Courses</p>
-            <p>Contact Us</p>
-        </div>
+        <ul>
+            <li>menuItemn</li>
+            <li>menuItemn</li>
+            <li>menuItemn</li>
+        </ul>
         <div className={styles.rightSide}></div>
     </div>)
 }
