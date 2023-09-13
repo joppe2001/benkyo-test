@@ -7,6 +7,18 @@
 		width: 100%;
 		display: flex;
 		justify-content: center;
+		align-items: center;
+
+		button {
+			background-color: transparent;
+			border: 1px solid;
+			border-radius: 5px;
+			color: rgb(222, 72, 18);
+			font-size: 2rem;
+			font-weight: bold;
+			cursor: pointer;
+			z-index: 999;
+		}
 	}
 
 	.imageContainer {

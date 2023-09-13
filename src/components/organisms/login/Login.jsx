@@ -6,12 +6,11 @@ import { useState, useEffect } from 'react';
 import { LoadingSpinner } from '../../atoms/Loading/Loading';
 
 const Login = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn());
+  const [showLogin, setShowLogin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setIsAuthenticated(!!user);
+    const unsubscribe = auth.onAuthStateChanged(() => {
       setTimeout(() => setLoading(false), 1000);
     });
 
@@ -44,7 +43,7 @@ const Login = () => {
   ];
 
   const handleAuth = (data) => {
-    if (isAuthenticated) {
+    if (showLogin) {
       login(data.email, data.password);
     } else {
       signup(data.email, data.password);
@@ -62,15 +61,19 @@ const Login = () => {
   return (
     <div className={styles.login}>
       <div className={styles.header}>
-        <h1>{isAuthenticated ? 'Log In' : 'Sign Up'}</h1>
+        <h1>{showLogin ? 'Log In ' : 'Sign Up '}</h1>
+        <button onClick={() => setShowLogin(!showLogin)}>
+          {showLogin ? '/ Signup' : '/ Login'}
+        </button>
       </div>
       <div className={styles.imageContainer}>
         <img src={background} alt="imag" className={styles.image} />
       </div>
       <Form
-        fields={isAuthenticated ? commonFields : signUpFields}
+        fields={showLogin ? commonFields : signUpFields}
         onSubmit={handleAuth}
       />
+      
     </div>
   );
 };
