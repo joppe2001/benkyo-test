@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    padding-top: 50px;
     h1 {
       font-size: 2.5rem; /* Increased font-size for heading */
       margin-right: 1rem; /* Added margin to separate from button */
@@ -38,13 +38,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 85vh;
+    height: 80vh;
     width: 100%;
     z-index: 1;
 
     .image {
       width: 90%;
-      height: 80%;
+      height: 95%;
       border-radius: 15px;
       object-fit: cover;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Added a shadow to the image */
