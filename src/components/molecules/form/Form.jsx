@@ -14,7 +14,6 @@ const Form = ({ fields, title, onSubmit }) => {
 
     if (onSubmit) {
       onSubmit(data);
-      // empty fields after submitting
       fields.forEach((field) => {
         const inputElement = document.getElementById(field.name);
         if (inputElement) {

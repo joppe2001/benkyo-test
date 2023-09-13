@@ -7,7 +7,7 @@ const App = () => {
   return (
     <div id="App">
     {/* add if statement to check for user login */}
-      <Menu />
+      {/* <Menu /> */}
       <Login />
     </div>
   );

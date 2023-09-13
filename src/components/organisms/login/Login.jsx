@@ -62,7 +62,7 @@ const Login = () => {
           } else if (data.password !== data.confirmPassword) {
             setMessage('passwords do not match');
           } else if (data.password.length < 6 || data.email.length < 10) {
-            setMessage('password and email must be at least 6/10 characters long');
+            setMessage('password and email must be at least 6 - 10 characters long');
           }
         });
     }
