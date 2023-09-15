@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Form.module.scss';
 
-const Form = ({ fields, title, onSubmit }) => {
+const Form = ({ fields, title, onSubmit, submitTitle }) => {
 
   const handleDataCollection = () => {
     const data = fields.reduce((acc, field) => {
@@ -44,7 +44,7 @@ const Form = ({ fields, title, onSubmit }) => {
           ))}
         <div className={styles.buttonContainer}>
           <button onClick={handleDataCollection} className={styles.submitButton}>
-            Submit
+            {submitTitle}
           </button>
         </div>
       </div>

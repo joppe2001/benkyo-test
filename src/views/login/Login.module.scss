@@ -1,0 +1,100 @@
+@import '../../mixins/for-device.scss';
+
+$bg-color: #242424;
+$primary-color: #e54b4b;
+$button-padding: 0.2rem 0.6rem;
+$button-transition: background-color 0.3s, color 0.3s;
+$button-border: 1px solid $primary-color;
+
+.login {
+  background-color: $bg-color;
+  min-height: 100vh;
+
+  .logOut, .header {
+    button {
+      background-color: transparent;
+      border: $button-border;
+      border-radius: 5px;
+      color: $primary-color;
+      cursor: pointer;
+      font-weight: 500;
+      transition: $button-transition;
+      z-index: 998;
+      &:hover {
+        background-color: $primary-color;
+        color: $bg-color;
+      }
+    }
+  }
+
+  .logOut {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+    z-index: 999;
+    color: $primary-color;
+    
+    button {
+      font-size: 1rem;
+      padding: $button-padding;
+      margin-left: 1rem;
+    }
+  }
+
+  .header {
+    position: relative;
+    color: $primary-color;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-right: 1rem;
+    }
+
+    button {
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  .imageContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    width: 100%;
+    z-index: 1;
+
+    .image {
+      width: 90%;
+      height: 95%;
+      border-radius: 15px;
+      object-fit: cover;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s;
+    }
+  }
+
+  .message {
+    position: absolute;
+    z-index: 8;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $bg-color;
+    color: $primary-color;
+    padding: 1rem;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+  }
+}

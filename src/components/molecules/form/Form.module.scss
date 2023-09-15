@@ -1,5 +1,4 @@
-
-@import "../../../mixins/for-device.scss";
+@import '../../../mixins/for-device.scss';
 
 .formContainer {
   position: relative;
@@ -8,73 +7,88 @@
   align-items: center;
   width: 100vw;
 
-
   .form {
     position: absolute;
     z-index: 999;
     display: flex;
     bottom: 100px;
     padding-bottom: 10px;
-    @include for-device(mobile) {
-      display: flex;
-      flex-direction: column;
-      bottom: 0;
-    }
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
 
     .fieldContainer {
       display: flex;
       flex-direction: column;
       border-radius: 15px;
       transition: all 0.3s ease-in-out;
-      margin-right: 25px;
-
-      @include for-device(mobile) {
-        margin-right: 0;
-        margin-bottom: 15px;
-      }
+      margin-bottom: 15px;
 
       .input {
-        border: none;
+        border: 1px solid #e54b4b;
         height: 50px;
-        width: 20vw;
-        border-radius: 15px;
+        width: 33vw;
+        border-radius: 10px;
         background-color: #3c3751;
-        box-shadow: 9px 9px 9px rgba(89, 88, 88, 0.25);
-        color: white;
-        padding-left: 10px;
+        color: #e54b4b;
+        padding-left: 15px;
+        font-weight: 500;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 5px 7px 6px #9331315f;
+        font-size: 1rem;
+
         &::placeholder {
-          color: white;
+          color: #e54b4b;
+          opacity: 0.9;
+          font-weight: 400;
+        }
+        &:hover {
+          box-shadow: 9px 10px 18px #e54b4ba8;
         }
 
         @include for-device(mobile) {
           width: 80vw;
         }
+
+        &:focus {
+          outline: none;
+          box-shadow: 7px 7px 12px rgba(89, 88, 88, 0.4);
+        }
       }
     }
+
     .buttonContainer {
       display: flex;
       flex-direction: column;
       justify-content: center;
-
       align-items: center;
       border-radius: 15px;
       transition: all 0.3s ease-in-out;
+
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1.02);
       }
+
       .submitButton {
-        height: 52px;
-        width: 150px;
-        border-radius: 15px;
-        border: none;
+        background-color: transparent;
+        border: 1px solid #e54b4b;
+        border-radius: 5px;
+        color: #3B3751;
+        font-size: 1.5rem;
+        font-weight: 500;
         cursor: pointer;
-        color: white;
-        transition: all 0.3s ease-in-out;
         background-color: #e54b4b;
+        z-index: 998;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s, color 0.3s;
+        backdrop-filter: blur(15px);
+        box-shadow: 9px 7px 9px rgba(89, 88, 88, 0.55);
 
         &:hover {
-        background-color: #3c3751;
-
+          background-color: #3B3751;
+          color: #e54b4b;
+          box-shadow: 13px 14px 9px #3c3751b5;
         }
 
         @include for-device(mobile) {

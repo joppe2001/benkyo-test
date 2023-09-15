@@ -2,27 +2,31 @@
 import app from './config';
 import {
   getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
+  signInWithEmailAndPassword
 } from 'firebase/auth';
+import { createUser } from './db';
 
 export const auth = getAuth(app);
 
 export const login = (email, password) => {
-    try {
-        return signInWithEmailAndPassword(auth, email, password);
-    }
-    catch (error) {
-        console.log(error);
-    }
+  try {
+    return signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const signup = (email, password) => {
-  return createUserWithEmailAndPassword(auth, email, password);
+export const signup = (email, password, displayName) => {
+  return createUser(email, password, displayName);
 };
 
-// add an exportable dfunction to check if user is logged in
 
 export const isLoggedIn = () => {
-    return auth.currentUser !== null;
+  return auth.currentUser !== null;
 };
+
+
+export const logOut = () => {
+  console.log('logout');
+  return auth.signOut();
+}

@@ -1,0 +1,17 @@
+button {
+    background-color: transparent;
+    border: 1px solid #e54b4b; /* Border to the button */
+    border-radius: 5px;
+    color: #e54b4b;
+    font-size: 1.5rem;
+    font-weight: 500; /* Reduced the font weight a bit */
+    cursor: pointer;
+    z-index: 998;
+    padding: 0.5rem 1rem; /* Padding to make button larger */
+    transition: background-color 0.3s, color 0.3s; /* Transition effect */
+
+    &:hover {
+      background-color: #e54b4b; /* Change color on hover */
+      color: #242424;
+    }
+  }
