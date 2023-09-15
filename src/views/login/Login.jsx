@@ -9,14 +9,16 @@ import { getUser } from '../../firebase/db';
 
 const Login = () => {
   const [showLogin, setShowLogin] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const { user, isLoggedIn } = useAuthState();
-  const [activeUser, setActiveUser] = useState(null);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(() => {
-      setTimeout(() => setLoading(false), 10000);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     });
 
     return () => unsubscribe();
@@ -90,6 +92,27 @@ const Login = () => {
   const handleLogout = () => {
     logOut();
   };
+  
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    const fetchUserInfo = async () => {
+        try {
+            const userInfo = await getUser(user.uid);
+            if (userInfo && userInfo.displayName) {
+                setUserName(userInfo.displayName);
+            } else {
+                console.error("User doesn't have a displayName or userInfo is undefined");
+            }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
+    };
+
+    fetchUserInfo();
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [isLoggedIn]);
+
 
   if (loading) {
     return (
@@ -99,12 +122,13 @@ const Login = () => {
     );
   }
 
+
   return (
     <div className={styles.login}>
       <div className={styles.logOut}>
         {isLoggedIn ? (
           <>
-            <span>Welcome, {user.email}</span>
+            <span>Welcome, {userName}</span>
             <button onClick={handleLogout}>Log Out</button>
           </>
         ) : (
