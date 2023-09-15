@@ -28,7 +28,7 @@
       .input {
         border: 1px solid #e54b4b;
         height: 50px;
-        width: 33vw;
+        width: 30vw;
         border-radius: 10px;
         background-color: #3c3751;
         color: #e54b4b;
@@ -48,7 +48,8 @@
         }
 
         @include for-device(mobile) {
-          width: 80vw;
+          width: 70vw;
+          height: 45px;
         }
 
         &:focus {
@@ -64,15 +65,17 @@
       justify-content: center;
       align-items: center;
       border-radius: 15px;
-      transition: all 0.3s ease-in-out;
+      transition: background-color 0.3s ease-in-out;
 
       &:hover {
-        transform: scale(1.02);
+        background-color: #3c3751;
       }
 
       .submitButton {
+        position: absolute;
+        top: 85.5%;
         background-color: transparent;
-        border: 1px solid #e54b4b;
+        border: none;
         border-radius: 5px;
         color: #3B3751;
         font-size: 1.5rem;
@@ -88,11 +91,12 @@
         &:hover {
           background-color: #3B3751;
           color: #e54b4b;
-          box-shadow: 13px 14px 9px #3c3751b5;
+          // box-shadow: 13px 14px 9px #3c3751b5;
         }
 
         @include for-device(mobile) {
-          width: 70vw;
+          width: 50vw;
+          top: 90%;
         }
       }
     }
