@@ -1,0 +1,68 @@
+@import '../../mixins/for-device.scss';
+
+$bg-color: #242424;
+$primary-color: #e54b4b;
+$button-padding: 0.2rem 0.6rem;
+$button-transition: background-color 0.3s, color 0.3s;
+$button-border: 1px solid $primary-color;
+
+.outerContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  background-image: url('../../images/grid-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+
+  .serverGridContainer {
+      max-height: 70vh; 
+      width: 95%; 
+      overflow-y: scroll;
+      border-radius: 10px;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 2%;
+          // border: $button-border;
+          border-radius: 5px;
+
+          .gridItem{
+              height: 34vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 10px;
+              transition: $button-transition;
+              background-color: $primary-color;
+              color: $bg-color;
+
+              &:hover {
+                background-color: $bg-color;
+                color: $primary-color;
+                border: none;
+              }
+          }
+
+          .gridItemTitle {
+            height: 28vh;
+              grid-column: 2 / 4;
+              grid-row: 1;
+              color: $bg-color;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 10px;
+              color: $primary-color;
+          }
+      }
+  }
+}
