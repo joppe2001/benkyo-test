@@ -56,11 +56,6 @@ export const ServerView = () => {
     }
   };
 
-const getUserName = async (userId) => {
-    const user = await getUser(userId);
-    return user;
-  }
-
   return (
     <div className={styles.server}>
         <div className="collapsibleUsers">
