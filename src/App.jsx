@@ -1,13 +1,18 @@
 import './App.scss';
-import Login from './components/organisms/login/Login';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Menu from './components/molecules/MainMenu/Menu';
+import Login from './views/login/Login';
+import ServerGrid from './views/serverGrid/serverGrid';
 
 const App = () => {
-
   return (
-    <div id="App">
-    {/* add if statement to check for user login */}
-      <Login />
-    </div>
+    <Router id="App">
+      <Menu />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/serverGrid" element={<ServerGrid />} />
+      </Routes>
+    </Router>
   );
 };
 
