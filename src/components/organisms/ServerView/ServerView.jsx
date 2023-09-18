@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getServerById, getUser } from '../../../firebase/db';
+import { getServerById } from '../../../firebase/db';
 import styles from './ServerView.module.scss';
 import { sendMessage } from '../../../firebase/db';
 import { useAuthState } from '../../../store/authState';
