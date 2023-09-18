@@ -1,23 +1,19 @@
 import Form from '../../components/molecules/form/Form';
 import styles from './Login.module.scss';
 import background from '../../images/binky-login.jpg';
-import { login, signup, auth, logOut } from '../../firebase/auth';
+import { login, signup, auth } from '../../firebase/auth';
 import { useState, useEffect } from 'react';
-import { LoadingSpinner } from '../../components/atoms/Loading/Loading';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [showLogin, setShowLogin] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(() => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      setTimeout(() => {}, 1000);
     });
 
     return () => unsubscribe();
@@ -89,14 +85,6 @@ const Login = () => {
         });
     }
   };
-
-  if (loading) {
-    return (
-      <div className="login">
-        <LoadingSpinner />
-      </div>
-    );
-  }
 
   return (
     <div className={styles.login}>

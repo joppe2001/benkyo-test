@@ -14,18 +14,19 @@ $button-border: 1px solid $primary-color;
   @return unquote($value);
 }
 
-$shadows-small: multiple-box-shadow(700);
-$shadows-medium: multiple-box-shadow(200);
+$shadows-small: multiple-box-shadow(3000);
+$shadows-medium: multiple-box-shadow(300);
 $shadows-big: multiple-box-shadow(100);
 
 @keyframes animStar {
-  from {
+  0%, 100% {
     transform: translateY(0px);
   }
-  to {
-    transform: translateY(-2000px);
+  50% {
+    transform: translateY(-800px);
   }
 }
+
 
 .outerContainer {
   position: relative;
@@ -34,12 +35,33 @@ $shadows-big: multiple-box-shadow(100);
   align-items: center;
   height: 100vh;
   flex-direction: column;
-  background-image: url('../../images/grid-bg.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
+  background: radial-gradient(ellipse at bottom, #243547 0%, $bg-color 100%);
 
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: $shadows-small;
+    animation: animStar 30s linear infinite;
+    z-index: 2;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: $shadows-medium;
+    animation: animStar 70s linear infinite;
+    z-index: 2;
+  }
   .serverGridContainer {
     height: 80vh;
     width: 95%;
@@ -75,49 +97,16 @@ $shadows-big: multiple-box-shadow(100);
         font-size: 1.2rem;
         cursor: pointer;
         overflow: hidden;
+        z-index: 999;
 
         &:hover {
-          // background: radial-gradient(
-          //   ellipse at bottom,
-          //   #243547 0%,
-          //   $bg-color 100%
-          // );
           background-color: $bg-color;
           color: $primary-color;
           border: none;
-        }
-
-        &:before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 1px;
-          height: 1px;
-          background: transparent;
-          box-shadow: $shadows-small;
-          animation: animStar 30s linear infinite;
-        }
-
-        &:after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 2px;
-          height: 2px;
-          background: transparent;
-          box-shadow: $shadows-medium;
-          animation: animStar 100s linear infinite;
-        }
-      }
-
-      .gridItem.bigStars {
-        &:before {
-          width: 3px;
-          height: 3px;
-          box-shadow: $shadows-big;
-          animation: animStar 150s linear infinite;
+          z-index: 1;
+          &::before {
+            animation: animStar 20s linear infinite;
+          }
         }
       }
 
@@ -132,6 +121,7 @@ $shadows-big: multiple-box-shadow(100);
         border-radius: 10px;
         color: $primary-color;
         background-color: $bg-color;
+        font-size: 1.3rem;
 
         @include for-device('mobile') {
           grid-column: 1 / 3;
