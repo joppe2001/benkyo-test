@@ -1,7 +1,7 @@
 import Form from '../../components/molecules/form/Form';
 import styles from './Login.module.scss';
 import background from '../../images/binky-login.jpg';
-import { login, signup, auth, logOut } from '../../firebase/auth';
+import { login, signup, auth } from '../../firebase/auth';
 import { useState, useEffect } from 'react';
 import { LoadingSpinner } from '../../components/atoms/Loading/Loading';
 import { useNavigate } from 'react-router-dom';
