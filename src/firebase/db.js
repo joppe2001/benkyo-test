@@ -143,3 +143,22 @@ export const sendMessage = async (serverId, message) => {
         console.error('Error sending message:', error);
     }
 }
+
+export const handleJoinServer = async (serverId, user) => {
+    try {
+        const serverDocRef = doc(db, 'servers', serverId);
+        const serverDoc = await getDoc(serverDocRef);
+
+        if (serverDoc.exists && !serverDoc.data().users.includes(user)) {
+            const serverData = serverDoc.data();
+            serverData.users.push(user);
+
+            await setDoc(serverDocRef, serverData);
+            console.log("User joined server successfully");
+        } else {
+            console.log('No such server! or ur already in ;)');
+        }
+    } catch (error) {
+        console.error('Error joining server:', error);
+    }
+}

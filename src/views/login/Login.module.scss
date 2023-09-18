@@ -125,21 +125,4 @@ $shadows-big: multiple-box-shadow(100);
       transition: transform 0.3s;
     }
   }
-
-  .message {
-    position: absolute;
-    z-index: 8;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: $bg-color;
-    color: $primary-color;
-    padding: 1rem;
-    border-radius: 5px;
-    font-size: 1.5rem;
-    font-weight: 500;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    opacity: 0.8;
-  }
 }

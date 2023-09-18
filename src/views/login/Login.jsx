@@ -4,6 +4,7 @@ import background from '../../images/binky-login.jpg';
 import { login, signup, auth } from '../../firebase/auth';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ErrorMessage } from '../../components/atoms/ErrorMessage/ErrorMessage';
 
 const Login = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -51,11 +52,10 @@ const Login = () => {
   ];
   const handleAuth = async (data) => {
     if (showLogin) {
-      console.log(data);
       login(data.email, data.password)
         .then(() => {
           setMessage('You have successfully logged in!');
-          navigate('/serverGrid');
+          navigate('/');
           setTimeout(() => setMessage(''), 3000);
         })
         .catch(() => {
@@ -66,7 +66,7 @@ const Login = () => {
         .then(() => {
           if (data.email.length !== 0 && data.password.length !== 0) {
             setMessage('You have successfully signed up!');
-            navigate('/serverGrid');
+            navigate('/');
             setTimeout(() => setMessage(''), 3000);
           }
           setMessage('we Need your email and password to sign you up');
@@ -102,7 +102,7 @@ const Login = () => {
         onSubmit={handleAuth}
         submitTitle={showLogin ? 'Log In' : 'Sign Up'}
       />
-      {message && <div className={styles.message}>{message}</div>}{' '}
+      {message && <ErrorMessage msg={message} />}{' '}
     </div>
   );
 };
