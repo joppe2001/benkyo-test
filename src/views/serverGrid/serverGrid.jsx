@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import styles from "./serverGrid.module.scss";
-import { getAllServers, createServer } from "../../firebase/db";
+import { getAllServers } from "../../firebase/db";
 
 const ServerGrid = () => {
 	const [servers, setServers] = useState([]);
