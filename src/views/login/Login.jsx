@@ -1,18 +1,17 @@
 import Form from '../../components/molecules/form/Form';
 import styles from './Login.module.scss';
-import background from '../../images/binky-login.png';
+import background from '../../images/binky-login.jpg';
 import { login, signup, auth, logOut } from '../../firebase/auth';
 import { useState, useEffect } from 'react';
 import { LoadingSpinner } from '../../components/atoms/Loading/Loading';
-import { useAuthState } from '../../store/authState';
-import { getUser } from '../../firebase/db';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
-  const { user, isLoggedIn } = useAuthState();
-  const [userName, setUserName] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(() => {
@@ -60,6 +59,7 @@ const Login = () => {
       login(data.email, data.password)
         .then(() => {
           setMessage('You have successfully logged in!');
+          navigate('/serverGrid');
           setTimeout(() => setMessage(''), 3000);
         })
         .catch(() => {
@@ -70,6 +70,7 @@ const Login = () => {
         .then(() => {
           if (data.email.length !== 0 && data.password.length !== 0) {
             setMessage('You have successfully signed up!');
+            navigate('/serverGrid');
             setTimeout(() => setMessage(''), 3000);
           }
           setMessage('we Need your email and password to sign you up');
@@ -89,31 +90,6 @@ const Login = () => {
     }
   };
 
-  const handleLogout = () => {
-    logOut();
-  };
-  
-  useEffect(() => {
-    if (!isLoggedIn) return;
-
-    const fetchUserInfo = async () => {
-        try {
-            const userInfo = await getUser(user.uid);
-            if (userInfo && userInfo.displayName) {
-                setUserName(userInfo.displayName);
-            } else {
-                console.error("User doesn't have a displayName or userInfo is undefined");
-            }
-        } catch (error) {
-            console.error('Error fetching user info:', error);
-        }
-    };
-
-    fetchUserInfo();
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, [isLoggedIn]);
-
-
   if (loading) {
     return (
       <div className="login">
@@ -122,19 +98,8 @@ const Login = () => {
     );
   }
 
-
   return (
     <div className={styles.login}>
-      <div className={styles.logOut}>
-        {isLoggedIn ? (
-          <>
-            <span>Welcome, {userName}</span>
-            <button onClick={handleLogout}>Log Out</button>
-          </>
-        ) : (
-          <span>Please log in.</span>
-        )}
-      </div>
       <div className={styles.header}>
         <h1>{showLogin ? 'Log In ' : 'Sign Up '}</h1>
         <button onClick={() => setShowLogin(!showLogin)}>

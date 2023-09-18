@@ -3,8 +3,29 @@
 $bg-color: #242424;
 $primary-color: #e54b4b;
 $button-padding: 0.2rem 0.6rem;
-$button-transition: background-color 0.3s, color 0.3s;
+$button-transition: background 0.3s, color 0.3s;
 $button-border: 1px solid $primary-color;
+
+@function multiple-box-shadow($n) {
+  $value: '#{random(2000)}px #{random(2000)}px #FFF';
+  @for $i from 2 through $n {
+    $value: '#{$value}, #{random(2000)}px #{random(2000)}px #FFF';
+  }
+  @return unquote($value);
+}
+
+$shadows-small: multiple-box-shadow(700);
+$shadows-medium: multiple-box-shadow(200);
+$shadows-big: multiple-box-shadow(100);
+
+@keyframes animStar {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-2000px);
+  }
+}
 
 .outerContainer {
   position: relative;
@@ -20,49 +41,102 @@ $button-border: 1px solid $primary-color;
   background-attachment: fixed;
 
   .serverGridContainer {
-      max-height: 70vh; 
-      width: 95%; 
-      overflow-y: scroll;
-      border-radius: 10px;
-      &::-webkit-scrollbar {
-        display: none;
+    height: 80vh;
+    width: 95%;
+    overflow-y: scroll;
+    border-radius: 10px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2%;
+      // border: $button-border;
+      border-radius: 5px;
+
+      @include for-device('mobile') {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
       }
 
-      .grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 2%;
-          // border: $button-border;
-          border-radius: 5px;
+      .gridItem {
+        position: relative;
+        height: 39vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        transition: $button-transition;
+        background-color: $primary-color;
+        color: $bg-color;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        overflow: hidden;
 
-          .gridItem{
-              height: 34vh;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              border-radius: 10px;
-              transition: $button-transition;
-              background-color: $primary-color;
-              color: $bg-color;
+        &:hover {
+          // background: radial-gradient(
+          //   ellipse at bottom,
+          //   #243547 0%,
+          //   $bg-color 100%
+          // );
+          background-color: $bg-color;
+          color: $primary-color;
+          border: none;
+        }
 
-              &:hover {
-                background-color: $bg-color;
-                color: $primary-color;
-                border: none;
-              }
-          }
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          height: 1px;
+          background: transparent;
+          box-shadow: $shadows-small;
+          animation: animStar 30s linear infinite;
+        }
 
-          .gridItemTitle {
-            height: 28vh;
-              grid-column: 2 / 4;
-              grid-row: 1;
-              color: $bg-color;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              border-radius: 10px;
-              color: $primary-color;
-          }
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 2px;
+          height: 2px;
+          background: transparent;
+          box-shadow: $shadows-medium;
+          animation: animStar 100s linear infinite;
+        }
       }
+
+      .gridItem.bigStars {
+        &:before {
+          width: 3px;
+          height: 3px;
+          box-shadow: $shadows-big;
+          animation: animStar 150s linear infinite;
+        }
+      }
+
+      .gridItemTitle {
+        height: 39vh;
+        grid-column: 2 / 4;
+        grid-row: 1;
+        color: $bg-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: $primary-color;
+        background-color: $bg-color;
+
+        @include for-device('mobile') {
+          grid-column: 1 / 3;
+        }
+      }
+    }
   }
 }

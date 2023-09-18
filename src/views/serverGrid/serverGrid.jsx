@@ -1,32 +1,48 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import styles from "./serverGrid.module.scss";
-import Menu from "../../components/molecules/MainMenu/Menu";
+import { getAllServers, createServer } from "../../firebase/db";
 
 const ServerGrid = () => {
-	// Dummy data to represent the servers you'll fetch from Firebase
-	const servers = [
-		{ id: "1", name: "Server 1" },
-		{ id: "2", name: "Server 2" },
-		{ id: "3", name: "Server 3" },
-		{ id: "4", name: "Server 4" },
-		{ id: "5", name: "Server 5" },
-		{ id: "6", name: "Server 6" },
-		{ id: "7", name: "Server 7" },
-		{ id: "8", name: "Server 8" },
-		{ id: "9", name: "Server 9" },
-	];
+	const [servers, setServers] = useState([]);
 
+	// const handleCreateServer = async () => {
+	// 	// Here you can define the server name and any initial users or messages, if needed.
+	// 	const serverName = "discord clone";
+	// 	const initialUsers = [];  // Add any user IDs or user objects if needed.
+	// 	const initialMessages = [];  // Add any initial message objects if needed.
+	
+	// 	const serverId = await createServer(serverName, initialUsers, initialMessages);
+	// 	setServers([...servers, {serverName, id: serverId}]);
+	// 	if (serverId) {
+	// 		console.log(`Server created with ID: ${serverId}`);
+	// 	} else {
+	// 		console.error("Failed to create the server");
+	// 	}
+	// };
+	
+
+	const getServers = async () => {
+		const servers = await getAllServers();
+		setServers(servers);
+	}
+
+	useEffect(() => {
+        getServers();
+    }, []);
+	
 	return (
 		<div className={styles.outerContainer}>
-            <Menu />
+			{/* <button onClick={handleCreateServer}>click me</button> */}
 			<div className={styles.serverGridContainer}>
 				<div className={styles.grid}>
 					<div className={styles.gridItemTitle}>Center Title</div>{" "}
-					{servers.map((server) => (
-						<div key={server.id} className={styles.gridItem}>
-							{server.name}
-						</div>
-					))}
+					{servers.map((server) => {
+						return (
+							<button className={styles.gridItem} key={server.id}>
+								{server.serverName}
+							</button>
+						);
+					})}
 				</div>
 			</div>
 		</div>
