@@ -3,7 +3,7 @@ import app from './config';
 import { auth, login } from './auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-const db = getFirestore(app);
+export const db = getFirestore(app);
 
 export const createUser = async (email, password, displayName) => {
     try {
@@ -68,6 +68,26 @@ export const createUser = async (email, password, displayName) => {
       }
   }
 
+  export const getServerById = async (serverId) => {
+    try {
+      const serverDocRef = doc(db, 'servers', serverId);
+      const serverDoc = await getDoc(serverDocRef);
+  
+      if (serverDoc.exists) {
+        return {
+          id: serverDoc.id,
+          ...serverDoc.data()
+        };
+      } else {
+        console.log('No such server!');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error getting server by ID:', error);
+      return null;
+    }
+  }
+
   export const getAllServers = async () => {
     try {
       const serversCollectionRef = collection(db, 'servers');
@@ -104,3 +124,22 @@ export const createUser = async (email, password, displayName) => {
         return null;
     }
 };
+
+export const sendMessage = async (serverId, message) => {
+    try {
+        const serverDocRef = doc(db, 'servers', serverId);
+        const serverDoc = await getDoc(serverDocRef);
+
+        if (serverDoc.exists) {
+            const serverData = serverDoc.data();
+            serverData.messages.push(message);
+
+            await setDoc(serverDocRef, serverData);
+            console.log("Message sent successfully");
+        } else {
+            console.log('No such server!');
+        }
+    } catch (error) {
+        console.error('Error sending message:', error);
+    }
+}

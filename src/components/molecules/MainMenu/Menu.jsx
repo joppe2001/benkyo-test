@@ -1,7 +1,8 @@
 import styles from './Menu.module.scss';
 import UserDisplayName from '../../atoms/UserName/UserName';
 import { logOut } from '../../../firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { isLoggedIn } from '../../../firebase/auth';
 
 const MainNav = () => {
   const navigate = useNavigate();
@@ -10,10 +11,14 @@ const MainNav = () => {
       navigate('/');
     });
   };
+
+  const userLoggedIn = isLoggedIn();
   return (
     <div className={styles.navContainer}>
       <ul>
-        <li>menuItemn</li>
+        <li>
+          {!userLoggedIn ? <Link to={'/'}>Home</Link> : <Link to={'/serverGrid'}>Home</Link>}
+        </li>
         <li>menuItemn</li>
         <li>menuItemn</li>
         <li>
