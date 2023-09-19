@@ -5,11 +5,14 @@ import styles from './ServerView.module.scss';
 import { sendMessage } from '../../../firebase/db';
 import { useAuthState } from '../../../store/authState';
 import { doc, onSnapshot } from 'firebase/firestore';
+import {  } from '../../../firebase/db';
 import {
   db,
   userNameFromMessageSenderId,
   deleteMessage,
-  editMessage
+  editMessage,
+  handleJoinServer,
+  hasJoinedServer
 } from '../../../firebase/db';
 
 export const ServerView = () => {
@@ -19,6 +22,7 @@ export const ServerView = () => {
   const [messageState, setMessageState] = useState({});
   const [displayNames, setDisplayNames] = useState({}); // For display names of users in server
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [subscribed, setSubscribed] = useState(false);
 
   const { user } = useAuthState();
 
@@ -65,8 +69,8 @@ export const ServerView = () => {
 
   useEffect(() => {
     const getServer = async () => {
-      const server = await getServerById(serverId);
-      setServer(server);
+      const serverInfo = await getServerById(serverId);
+      setServer(serverInfo);
       console.log(server);
     };
 
@@ -117,6 +121,9 @@ export const ServerView = () => {
     const diffInHours = Math.floor(diffInMinutes / 60);
     const diffInDays = Math.floor(diffInHours / 24);
 
+    if (diffInSeconds < 60) {
+      return ``;
+    }
     if (diffInMinutes < 60) {
       return `${diffInMinutes} minutes ago`;
     } else if (diffInHours < 24) {
@@ -151,8 +158,35 @@ export const ServerView = () => {
     await deleteMessage(serverId, messageId);
   };
 
+  const handleJoin = async (serverId, userId) => {
+    await handleJoinServer(serverId, userId);
+
+    // Update subscribed status after joining
+    setSubscribed(true);
+  };
+
+  const userId = useAuthState().user;
+
+  useEffect(() => {
+    const checkSubscription = async () => {
+      const hasSubscribed = await hasJoinedServer(serverId, userId);
+      setSubscribed(hasSubscribed);
+    };
+
+    checkSubscription();
+  }, [serverId, userId]);
+
   return (
     <div className={styles.server}>
+       {!subscribed && (
+        <button
+          onClick={() => handleJoin(serverId, userId.uid)}
+          key={server.serverName}
+          id={styles.joinButton}
+        >
+          {subscribed ? 'Joined' : 'Join'}
+        </button>
+      )}
       <div className={styles.chat}>
         <div className={styles.messageContainer} ref={messageContainerRef}>
           {server.messages &&

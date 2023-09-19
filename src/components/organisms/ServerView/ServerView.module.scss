@@ -10,6 +10,23 @@ $header-height: 60px;
   height: 100vh;
   background-color: $bg-color;
 
+  #joinButton {
+    position: absolute;
+    top: 2.5%;
+    right: 2.5%;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    background-color: $primary-color;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $button-hover;
+    }
+  }
+
   .chat {
     flex: 1;
     display: flex;
@@ -34,7 +51,7 @@ $header-height: 60px;
         color: white;
         max-width: 70%;
         align-self: flex-end; // Assuming messages are from the user. If they're from others, use flex-start
-        margin: 0.5rem;
+        margin: 1rem 0.5rem;
         display: flex;
         flex-direction: column;
 

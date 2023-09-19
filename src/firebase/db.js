@@ -15,7 +15,8 @@ export const createUser = async (email, password, displayName) => {
         await setDoc(userDocRef, {
           uid: user.uid,
           email: email,
-          displayName: displayName
+          displayName: displayName,
+          servers: []
         });
   
         console.log('User created and logged in successfully');
@@ -64,7 +65,23 @@ export const createUser = async (email, password, displayName) => {
       return null;
     }
   }
-  
+
+  export const createServer = async (serverName, users = [], messages = []) => {
+    try {
+        const serverData = {
+            serverName: serverName,
+            users: users,
+            messages: messages,
+        };
+
+        const serverDocRef = await addDoc(collection(db, 'servers'), serverData);
+        console.log("Server created with ID: ", serverDocRef.id);
+        return serverDocRef.id;
+    } catch (error) {
+        console.error("Error creating server:", error);
+        return null;
+    }
+};
 
   export const getServer = async (serverName) => {
       try {
@@ -129,22 +146,6 @@ export const createUser = async (email, password, displayName) => {
     }
   }
   
-  export const createServer = async (serverName, users = [], messages = []) => {
-    try {
-        const serverData = {
-            serverName: serverName,
-            users: users,
-            messages: messages,
-        };
-
-        const serverDocRef = await addDoc(collection(db, 'servers'), serverData);
-        console.log("Server created with ID: ", serverDocRef.id);
-        return serverDocRef.id;
-    } catch (error) {
-        console.error("Error creating server:", error);
-        return null;
-    }
-};
 
 export const sendMessage = async (serverId, message) => {
     try {
@@ -250,20 +251,51 @@ export const userNameFromMessageSenderId = async (senderId) => {
 
 
 export const handleJoinServer = async (serverId, user) => {
+    // have the user that joined added to the server's users array and the server added to the user's servers array and that user isnt able to join if theyre already joined
     try {
         const serverDocRef = doc(db, 'servers', serverId);
         const serverDoc = await getDoc(serverDocRef);
 
-        if (serverDoc.exists && !serverDoc.data().users.includes(user)) {
+        if (serverDoc.exists) {
             const serverData = serverDoc.data();
             serverData.users.push(user);
-
             await setDoc(serverDocRef, serverData);
+
+            const userDocRef = doc(db, 'users', user);
+            const userDoc = await getDoc(userDocRef);
+
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                userData.servers.push(serverId);
+                await setDoc(userDocRef, userData);
+            } else {
+                console.log('No such user!');
+            }
+
             console.log("User joined server successfully");
         } else {
-            console.log('No such server! or ur already in ;)');
+            console.log('No such server!');
         }
     } catch (error) {
         console.error('Error joining server:', error);
+    }
+}
+
+
+export const hasJoinedServer = async (serverId, user) => {
+    try {
+        const serverDocRef = doc(db, 'servers', serverId);
+        const serverDoc = await getDoc(serverDocRef);
+
+        if (serverDoc.exists) {
+            const serverData = serverDoc.data();
+            return serverData.users.includes(user);
+        } else {
+            console.log('No such server!');
+            return false;
+        }
+    } catch (error) {
+        console.error('Error checking if user has joined server:', error);
+        return false;
     }
 }

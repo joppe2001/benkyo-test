@@ -12,10 +12,12 @@ const firebaseConfig = {
   storageBucket: "benkyo-inc.appspot.com",
   messagingSenderId: "605538396885",
   appId: "1:605538396885:web:7677cd834c9412ca74505c",
-  measurementId: "G-S94DEEQE80"
+  measurementId: "G-S94DEEQE80",
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 
 export default app;
