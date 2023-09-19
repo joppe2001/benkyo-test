@@ -258,7 +258,9 @@ export const handleJoinServer = async (serverId, user) => {
 
         if (serverDoc.exists) {
             const serverData = serverDoc.data();
-            serverData.users.push(user);
+            if (!serverData.users.includes(user)) {
+              serverData.users = [...serverData.users, user];
+          }
             await setDoc(serverDocRef, serverData);
 
             const userDocRef = doc(db, 'users', user);
@@ -266,7 +268,9 @@ export const handleJoinServer = async (serverId, user) => {
 
             if (userDoc.exists) {
                 const userData = userDoc.data();
-                userData.servers.push(serverId);
+                if (!userData.servers.includes(serverId)) {
+                  userData.servers = [...userData.servers, serverId];
+              }
                 await setDoc(userDocRef, userData);
             } else {
                 console.log('No such user!');

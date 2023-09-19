@@ -2,32 +2,38 @@ import styles from './Menu.module.scss';
 import UserDisplayName from '../../atoms/UserName/UserName';
 import { logOut } from '../../../firebase/auth';
 import { useNavigate, Link } from 'react-router-dom';
-// import { isLoggedIn } from '../../../firebase/auth';
 
 const MainNav = () => {
-  const navigate = useNavigate();
-  const handleLogOut = () => {
-    logOut().then(() => {
-      navigate('/');
-    });
-  };
+    const navigate = useNavigate();
+    const handleLogOut = () => {
+        logOut().then(() => {
+            navigate('/');
+        });
+    };
 
-  // const userLoggedIn = isLoggedIn();
-  return (
-    <div className={styles.navContainer}>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>menuItemn</li>
-        <li>menuItemn</li>
-        <li>
-          <UserDisplayName onLogout={handleLogOut} />
-        </li>
-      </ul>
-      <div className={styles.rightSide}></div>
-    </div>
-  );
+    const toggleMenu = () => {
+        const menu = document.querySelector(`.${styles.navList}`);
+        menu.classList.toggle(styles.active);
+    };
+
+    return (
+        <div className={styles.navContainer}>
+            <div className={styles.menuToggle} onClick={toggleMenu}>
+                ☰
+            </div>
+            <ul className={styles.navList}>
+                <li className={styles.navItem}>
+                    <Link to="/" className={styles.navLink}>Home</Link>
+                </li>
+                <li className={styles.navLink}>menuItemn</li>
+                <li className={styles.navLink}>menuItemn</li>
+                <li className={styles.navLink}>
+                    <UserDisplayName onLogout={handleLogOut} />
+                </li>
+            </ul>
+            <div className={styles.rightSide}></div>
+        </div>
+    );
 };
 
 export default MainNav;
