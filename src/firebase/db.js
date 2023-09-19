@@ -1,7 +1,7 @@
 import { query, where, getDocs, collection, getFirestore, doc, setDoc, getDoc, addDoc } from 'firebase/firestore';
 import app from './config';
 import { auth, login } from './auth';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 export const db = getFirestore(app);
 
@@ -25,6 +25,27 @@ export const createUser = async (email, password, displayName) => {
       console.error('Error creating user:', error);
     }
   };
+
+  export const createUserWithGoogle = async () => {
+    try {
+      const { user } = await signInWithPopup(auth, new GoogleAuthProvider());
+
+      if (user) {
+        const userDocRef = doc(db, 'users', user.uid);
+
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName
+        });
+
+        console.log('User created and logged in successfully');
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+    }
+};
+
 
 
   export const getUser = async (uid) => {
@@ -132,10 +153,21 @@ export const sendMessage = async (serverId, message) => {
 
         if (serverDoc.exists) {
             const serverData = serverDoc.data();
-            serverData.messages.push(message);
 
+            // Using Firestore's collection and addDoc to generate a unique ID for the message
+            const messagesCollection = collection(serverDocRef, 'messages');
+            const messageRef = await addDoc(messagesCollection, message);
+
+            // The unique ID is now in messageRef.id
+            const newMessage = {
+                ...message,
+                id: messageRef.id
+            };
+
+            serverData.messages.push(newMessage);
             await setDoc(serverDocRef, serverData);
-            console.log("Message sent successfully");
+
+            console.log("Message sent successfully with ID:", messageRef.id);
         } else {
             console.log('No such server!');
         }
@@ -143,6 +175,79 @@ export const sendMessage = async (serverId, message) => {
         console.error('Error sending message:', error);
     }
 }
+
+
+export const deleteMessage = async (serverId, messageId) => {
+  // only able to delete if you are the sender of the message
+  try {
+    const serverDocRef = doc(db, 'servers', serverId);
+    const serverDoc = await getDoc(serverDocRef);
+
+    if (serverDoc.exists) {
+      const serverData = serverDoc.data();
+      const messageIndex = serverData.messages.findIndex(message => message.id === messageId);
+
+      if (messageIndex >= 0) {
+        serverData.messages.splice(messageIndex, 1);
+        await setDoc(serverDocRef, serverData);
+        console.log("Message deleted successfully");
+      } else {
+        console.log('No such message!');
+      }
+    } else {
+      console.log('No such server!');
+    }
+  } catch (error) {
+    console.error('Error deleting message:', error);
+  }
+}
+
+export const editMessage = async (serverId, messageId, newContent) => {
+  // only able to edit if you are the sender of the message
+  try {
+    const serverDocRef = doc(db, 'servers', serverId);
+    const serverDoc = await getDoc(serverDocRef);
+
+    if (serverDoc.exists) {
+      const serverData = serverDoc.data();
+      const messageIndex = serverData.messages.findIndex(message => message.id === messageId);
+
+      if (messageIndex >= 0) {
+        serverData.messages[messageIndex].content = newContent; // changing 'message' to 'content'
+        await setDoc(serverDocRef, serverData);
+        console.log("Message edited successfully");
+      } else {
+        console.log('No such message!');
+      }
+    } else {
+      console.log('No such server!');
+    }
+  } catch (error) {
+    console.error('Error editing message:', error);
+  }
+}
+
+
+export const userNameFromMessageSenderId = async (senderId) => {
+  try {
+    // Check if there's a user with the provided senderId (which should match a uid) in the users collection
+    const userDocRef = doc(db, 'users', senderId);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists) {
+      console.log(`User with UID ${senderId} not found in users collection.`);
+      return null;
+    }
+
+    // If the user exists, return the displayName
+    const userData = userDoc.data();
+    return userData.displayName;
+
+  } catch (error) {
+    console.error('Error getting user name from message sender id:', error);
+  }
+}
+
 
 export const handleJoinServer = async (serverId, user) => {
     try {

@@ -61,20 +61,13 @@
 
     .buttonContainer {
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       border-radius: 15px;
       transition: background-color 0.3s ease-in-out;
+      height: 8vh;
 
-      &:hover {
-        background-color: #3c3751;
-      }
-
-      .submitButton {
-        position: absolute;
-        top: 85.5%;
-        background-color: transparent;
+      button, input {
         border: none;
         border-radius: 5px;
         color: #3B3751;
@@ -87,15 +80,15 @@
         transition: all 0.3s, color 0.3s;
         backdrop-filter: blur(15px);
         box-shadow: 9px 7px 9px rgba(89, 88, 88, 0.55);
-
-        &:hover {
+        width: 20vh;
+          &:hover {
           background-color: #3B3751;
           color: #e54b4b;
           // box-shadow: 13px 14px 9px #3c3751b5;
         }
 
         @include for-device(mobile) {
-          width: 50vw;
+          width: 25vw;
           top: 90%;
         }
       }

@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from './Form.module.scss';
 
-const Form = ({ fields, title, onSubmit, submitTitle }) => {
+const Form = ({ fields, title, onSubmit, submitTitle, customSubmitButton }) => {
+  const handleDataCollection = (e) => {
+    e.preventDefault(); // Add this to prevent the default form submission behavior
 
-  const handleDataCollection = () => {
     const data = fields.reduce((acc, field) => {
       const inputElement = document.getElementById(field.name);
       if (inputElement) {
@@ -27,7 +28,7 @@ const Form = ({ fields, title, onSubmit, submitTitle }) => {
 
   return (
     <div className={styles.formContainer}>
-      <div className={styles.form}>
+      <form className={styles.form} onSubmit={handleDataCollection}>
         <h2 className={styles.title}>{title}</h2>
 
         {fields &&
@@ -43,11 +44,13 @@ const Form = ({ fields, title, onSubmit, submitTitle }) => {
             </div>
           ))}
         <div className={styles.buttonContainer}>
-          <button onClick={handleDataCollection} className={styles.submitButton}>
-            {submitTitle}
-          </button>
+          {customSubmitButton && (
+            <div className={styles.customButtonContainer}>
+              {customSubmitButton}
+            </div>
+          )}
         </div>
-      </div>
+      </form>
     </div>
   );
 };

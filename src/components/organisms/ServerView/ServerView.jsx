@@ -1,17 +1,68 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getServerById } from '../../../firebase/db';
 import styles from './ServerView.module.scss';
 import { sendMessage } from '../../../firebase/db';
 import { useAuthState } from '../../../store/authState';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../../firebase/db';
+import {
+  db,
+  userNameFromMessageSenderId,
+  deleteMessage,
+  editMessage
+} from '../../../firebase/db';
+import { extractTime } from '../../../utils/extractTime';
 
 export const ServerView = () => {
   const { serverId } = useParams();
   const [server, setServer] = useState({});
   const [message, setMessage] = useState(''); // For input value
+  const [messageState, setMessageState] = useState({});
+  const [displayNames, setDisplayNames] = useState({}); // For display names of users in server
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
   const { user } = useAuthState();
+
+  const messagesEndRef = useRef(null);
+  const messageContainerRef = useRef(null);
+
+  const userName = async (senderId) => {
+    const userName = await userNameFromMessageSenderId(senderId);
+    return userName;
+  };
+
+  const scrollToBottom = (smooth = true) => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: !isFirstRender ? 'smooth' : 'auto'
+    });
+  };
+
+  useEffect(() => {
+    const fetchDisplayNames = async () => {
+      const newDisplayNames = {};
+
+      for (let msg of server.messages || []) {
+        if (!newDisplayNames[msg.senderId]) {
+          const name = await userName(msg.senderId);
+          if (name) {
+            newDisplayNames[msg.senderId] = name;
+          }
+        }
+      }
+      setDisplayNames(newDisplayNames);
+    };
+    fetchDisplayNames();
+  }, [server.messages]);
+
+  useEffect(() => {
+    if (isFirstRender) {
+      scrollToBottom(false);
+      setIsFirstRender(false);
+    } else {
+      scrollToBottom();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [server.messages]);
 
   useEffect(() => {
     const getServer = async () => {
@@ -52,17 +103,90 @@ export const ServerView = () => {
     }
   };
 
+  const handleEditMessage = (index) => {
+    setMessageState({ ...messageState, [index]: 'editing' });
+  };
+
+  const saveEditedMessage = async (index, newContent, messageId) => {
+    await editMessage(serverId, messageId, newContent);
+    setMessageState({ ...messageState, [index]: 'normal' });
+  };
+
+  const handleDeleteMessage = async (index, messageId) => {
+    await deleteMessage(serverId, messageId);
+  };
+
   return (
     <div className={styles.server}>
-      {/* <div className="collapsibleUsers">users</div> */}
       <div className={styles.chat}>
-        <div className={styles.messageContainer}>
+        <div className={styles.messageContainer} ref={messageContainerRef}>
           {server.messages &&
             server.messages.map((msg, index) => (
-              <div key={index} className={styles.messages}>
-                {msg.content}
+              <div key={msg.id} className={styles.messages}>
+                <strong className={styles.userName}>
+                  <div>
+                    {displayNames[msg.senderId] || 'Unknown'}{' '}
+                    <span className={styles.timeStamp}>
+                      {extractTime(msg.timestamp)}
+                    </span>
+                  </div>
+                  <div className={styles.settings}>
+                    <button
+                      className={styles.delete}
+                      onClick={() => handleDeleteMessage(index, msg.id)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M8 9h8v10H8z"
+                          opacity=".3"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="m15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"
+                        />
+                      </svg>
+                    </button>
+                    {messageState[index] !== 'editing' && (
+                      <button
+                        onClick={() => handleEditMessage(index)}
+                        className={styles.edit}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="32"
+                          height="32"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M3 21h3.75L17.81 9.94l-3.75-3.75L3 17.25V21zm2-2.92l9.06-9.06l.92.92L5.92 19H5v-.92zM18.37 3.29a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34z"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                </strong>{' '}
+                {messageState[index] === 'editing' ? (
+                  <input
+                    defaultValue={msg.content}
+                    onBlur={(e) =>
+                      saveEditedMessage(index, e.target.value, msg.id)
+                    }
+                  />
+                ) : messageState[index] === 'deleted' ? (
+                  <em>Message deleted</em>
+                ) : (
+                  msg.content
+                )}
               </div>
             ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className={styles.messageInput}>
           <input

@@ -5,6 +5,7 @@ import { login, signup, auth } from '../../firebase/auth';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ErrorMessage } from '../../components/atoms/ErrorMessage/ErrorMessage';
+import { createUserWithGoogle } from '../../firebase/db';
 
 const Login = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -86,6 +87,27 @@ const Login = () => {
     }
   };
 
+  const handleGoogleSignup = async () => {
+    await createUserWithGoogle('', '');
+
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        setMessage('You have successfully signed up with Google!');
+        navigate('/');
+        setTimeout(() => setMessage(''), 3000);
+    } else {
+        setMessage('There was an issue signing up with Google.');
+    }
+};
+
+
+const GoogleSignUpButton = () => (
+  <button onClick={handleGoogleSignup}>google signUp</button>
+);
+const GoogleSignInButton = () => (
+  <button onClick={handleGoogleSignup}>google signIn</button>
+);
+
   return (
     <div className={styles.login}>
       <div className={styles.header}>
@@ -98,10 +120,14 @@ const Login = () => {
         <img src={background} alt="imag" className={styles.image} />
       </div>
       <Form
-        fields={showLogin ? commonFields : signUpFields}
-        onSubmit={handleAuth}
-        submitTitle={showLogin ? 'Log In' : 'Sign Up'}
-      />
+      fields={showLogin ? commonFields : signUpFields}
+      onSubmit={handleAuth}
+      customSubmitButton={
+        showLogin 
+          ? <><input type="submit" value="Log In" /><GoogleSignInButton /></>
+          : <><input type="submit" value="Sign Up" /><GoogleSignUpButton /></>
+      }
+    />
       {message && <ErrorMessage msg={message} />}{' '}
     </div>
   );
