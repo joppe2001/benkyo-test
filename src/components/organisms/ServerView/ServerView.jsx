@@ -75,6 +75,7 @@ export const ServerView = () => {
     };
 
     getServer();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverId]);
 
   useEffect(() => {
