@@ -187,7 +187,7 @@ export const deleteMessage = async (serverId, messageId) => {
       const serverData = serverDoc.data();
       const messageIndex = serverData.messages.findIndex(message => message.id === messageId);
 
-      if (messageIndex >= 0) {
+      if (messageIndex >= 0 && serverData.messages[messageIndex].senderId === auth.currentUser.uid) {
         serverData.messages.splice(messageIndex, 1);
         await setDoc(serverDocRef, serverData);
         console.log("Message deleted successfully");
@@ -212,7 +212,7 @@ export const editMessage = async (serverId, messageId, newContent) => {
       const serverData = serverDoc.data();
       const messageIndex = serverData.messages.findIndex(message => message.id === messageId);
 
-      if (messageIndex >= 0) {
+      if (messageIndex >= 0 && serverData.messages[messageIndex].senderId === auth.currentUser.uid) {
         serverData.messages[messageIndex].content = newContent; // changing 'message' to 'content'
         await setDoc(serverDocRef, serverData);
         console.log("Message edited successfully");
