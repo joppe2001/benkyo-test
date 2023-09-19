@@ -30,8 +30,8 @@ const App = () => {
 			<Menu />
 			<Routes>
 				{!userLogin.isLoggedIn && [
-					<Route path="/" element={<Login />} />,
-					<Route path="/serverGrid" element={<Login />} />,
+					<Route key="login" path="/" element={<Login />} />,
+					<Route key="/serverGrid/login" path="/serverGrid" element={<Login />} />,
 				]}
 				{userLogin.isLoggedIn && [
 					<Route key="serverGrid" path="/" element={<ServerGrid />} />,

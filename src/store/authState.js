@@ -8,7 +8,6 @@ export const useAuthState = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async firebaseUser => {
       if (firebaseUser) {
-        console.log('firebaseUser', firebaseUser);
         setUser(firebaseUser);
         setIsLoggedIn(true);
       } else {
