@@ -13,6 +13,7 @@ import {
 	editMessage,
 	handleJoinServer,
 	hasJoinedServer,
+  getAllMessagesFromServer
 } from "../../../firebase/db";
 
 export const ServerView = () => {
@@ -34,11 +35,17 @@ export const ServerView = () => {
 		return userName;
 	};
 
-	const scrollToBottom = (smooth = true) => {
+	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({
-			behavior: !isFirstRender ? "smooth" : "auto",
+			behavior: !isFirstRender ? "auto" : "auto",
 		});
 	};
+
+  useEffect(() => {
+    scrollToBottom(false);
+    setIsFirstRender(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 	useEffect(() => {
 		const fetchDisplayNames = async () => {
