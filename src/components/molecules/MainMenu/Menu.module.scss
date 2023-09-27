@@ -1,69 +1,85 @@
+@import '../../../mixins/for-device.scss';
+
 .navContainer {
     position: absolute;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: transparent;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    z-index: 999;
+    top: 0;
     width: 100%;
-    z-index: 1000;
-
-    .menuToggle {
-        display: none; // Initially hidden
-        font-size: 2rem;
-        cursor: pointer;
-    }
-
-    .navList {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 1rem;
-
-        .navItem {
-            margin: 0;
-
-            .navLink {
-                text-decoration: none;
-                color: #333333;
-                transition: color 0.3s ease;
-
-                &:hover {
-                    color: #007BFF;
-                }
-            }
-        }
-    }
-
-    .rightSide {
-        // Add any styles you need for the right side of the navigation here.
+    
+    @include for-device('desktop') {
+        justify-content: flex-start;
+        gap: 2rem;
     }
 }
 
-// Media query for mobile screens
-@media screen and (max-width: 768px) {
-    .navContainer {
-        flex-direction: column;
-        align-items: flex-start;
+.menuToggle {
+    font-size: 2rem;
+    cursor: pointer;
 
-        .menuToggle {
-            display: block; // Show the menu toggle
+    @include for-device('desktop') {
+        display: none;
+    }
+}
+
+.navList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 5px 5px 0;
+
+    &.active {
+        display: flex;
+    }
+    
+    .userName {
+        position: relative;
+        right: 0;
+    }
+
+    @include for-device('desktop') {
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+        position: static;
+        width: auto;
+        background-color: transparent;
+        box-shadow: none;
+    }
+}
+
+.navItem {
+    margin: 0;
+
+    .navLink {
+        text-decoration: none;
+        color: #333;
+        padding: 1rem;
+        display: block;
+
+        &:hover {
+            background-color: #f6f6f6;
         }
 
-        .navList {
-            display: none; // Initially hide the menu on mobile
-            width: 100%;
-            flex-direction: column;
-            gap: 0.5rem;
-            
-            &.active { // When the menu is active
-                display: flex;
-            }
+        @include for-device('desktop') {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
 
-            .navItem {
-                width: 100%;
-                text-align: left;
+            &:hover {
+                background-color: #eee;
+                color: #555;
             }
         }
     }

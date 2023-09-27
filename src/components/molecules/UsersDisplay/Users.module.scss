@@ -1,0 +1,71 @@
+// Users.module.scss
+
+.usersDisplay {
+    position: absolute;
+    width: 20%;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    overflow-y: auto;
+    height: 70%;
+    top: 10.4%;
+    right: 1.45%;
+    transition: transform 0.3s ease-in-out;  // Optional transition effect\
+    border-radius: 0 5px 0 5px;
+
+    // Add this for the toggle effect (optional)
+    &.hidden {
+        background: none;
+        border: none;
+
+        button {
+            position: absolute;
+            right: 0;
+        }
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;  // Make the button round
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: darken(#007bff, 10%);
+        }
+    }
+
+    h1 {
+        color: #333;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            padding: 0.5rem 0;
+            color: #555;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+
+            &:hover {
+                background-color: #f2f2f2;
+            }
+
+            &:not(:last-child) {
+                border-bottom: 1px solid #e8e8e8;
+            }
+        }
+    }
+}

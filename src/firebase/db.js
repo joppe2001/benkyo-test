@@ -56,6 +56,7 @@ export const createUserWithGoogle = async () => {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName,
+        servers: [],
       });
 
       console.log('User created and logged in successfully');
@@ -275,7 +276,6 @@ export const userNameFromMessageSenderId = async (senderId) => {
 };
 
 export const handleJoinServer = async (serverId, user) => {
-  // have the user that joined added to the server's users array and the server added to the user's servers array and that user isnt able to join if theyre already joined
   try {
     const serverDocRef = doc(db, 'servers', serverId);
     const serverDoc = await getDoc(serverDocRef);
@@ -284,28 +284,35 @@ export const handleJoinServer = async (serverId, user) => {
       const serverData = serverDoc.data();
       if (!serverData.users.includes(user)) {
         serverData.users = [...serverData.users, user];
-      }
-      await setDoc(serverDocRef, serverData);
+        await setDoc(serverDocRef, serverData);
 
-      const userDocRef = doc(db, 'users', user);
-      const userDoc = await getDoc(userDocRef);
+        const userDocRef = doc(db, 'users', user);
+        const userDoc = await getDoc(userDocRef);
 
-      if (userDoc.exists) {
-        const userData = userDoc.data();
-        if (!userData.servers.includes(serverId)) {
-          userData.servers = [...userData.servers, serverId];
+        if (userDoc.exists) {
+          const userData = userDoc.data();
+          console.log('userData', userData);
+          if (!userData.servers.includes(serverId)) {
+            userData.servers = [...userData.servers, serverId];
+            await setDoc(userDocRef, userData);
+          }
+        } else {
+          console.log('No such user!');
         }
-        await setDoc(userDocRef, userData);
-      } else {
-        console.log('No such user!');
-      }
 
-      console.log('User joined server successfully');
+        console.log('User joined server successfully');
+        return true;
+      } else {
+        console.log('User is already subscribed to this server');
+        return false;
+      }
     } else {
       console.log('No such server!');
+      return false;
     }
   } catch (error) {
     console.error('Error joining server:', error);
+    return false;
   }
 };
 
@@ -326,3 +333,59 @@ export const hasJoinedServer = async (serverId, user) => {
     return false;
   }
 };
+
+export const deleteMessagesFromUnknowUser = async (serverId) => {
+ // usign the users collection and the servers collection[messages] to delete messages from unknow users
+ try {
+    const serverDocRef = doc(db, 'servers', serverId);
+    const serverDoc = await getDoc(serverDocRef);
+
+    if (serverDoc.exists) {
+      const serverData = serverDoc.data();
+
+      const usersCollectionRef = collection(db, 'users');
+      const querySnapshot = await getDocs(usersCollectionRef);
+
+      const users = [];
+      querySnapshot.forEach((doc) => {
+        users.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+
+      const usersId = users.map((user) => user.uid);
+      const messages = serverData.messages.filter((message) =>
+        usersId.includes(message.senderId)
+      );
+
+      serverData.messages = messages;
+      await setDoc(serverDocRef, serverData);
+      console.log('Messages deleted successfully');
+    } else {
+      console.log('No such server!');
+    }
+  } catch (error) {
+    console.error('Error deleting messages:', error);
+  }
+};
+
+export const getUsersFromServer = async (serverId) => {
+  try {
+    const serverDocRef = doc(db, 'servers', serverId);
+    const serverDoc = await getDoc(serverDocRef);
+
+    if (serverDoc.exists) {
+      const serverData = serverDoc.data();
+      const users = serverData.users;
+
+      return users;
+    } else {
+      console.log('No such server!');
+      return [];
+    }
+  } catch (error) {
+    console.error('Error getting users from server:', error);
+    return [];
+  }
+}

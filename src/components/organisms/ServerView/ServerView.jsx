@@ -1,10 +1,10 @@
-import { useParams } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
-import { getServerById } from '../../../firebase/db';
-import styles from './ServerView.module.scss';
-import { sendMessage } from '../../../firebase/db';
-import { useAuthState } from '../../../store/authState';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { useParams } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { getServerById } from "../../../firebase/db";
+import styles from "./ServerView.module.scss";
+import { sendMessage } from "../../../firebase/db";
+import { useAuthState } from "../../../store/authState";
+import { doc, onSnapshot } from "firebase/firestore";
 import {
   db,
   userNameFromMessageSenderId,
@@ -12,16 +12,19 @@ import {
   editMessage,
   handleJoinServer,
   hasJoinedServer
-} from '../../../firebase/db';
+} from "../../../firebase/db";
+import Users from "../../molecules/UsersDisplay/Users";
 
 export const ServerView = () => {
   const { serverId } = useParams();
   const [server, setServer] = useState({});
-  const [message, setMessage] = useState(''); // For input value
+  const [message, setMessage] = useState(""); // For input value
   const [messageState, setMessageState] = useState({});
   const [displayNames, setDisplayNames] = useState({}); // For display names of users in server
   const [isFirstRender, setIsFirstRender] = useState(true);
-  const [subscribed, setSubscribed] = useState(false);
+  const [subscribed, setSubscribed] = useState(
+    localStorage.getItem(`subscribed_${serverId}`) === "true"
+  );
 
   const { user } = useAuthState();
 
@@ -35,7 +38,7 @@ export const ServerView = () => {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
-      behavior: !isFirstRender ? 'auto' : 'auto'
+      behavior: !isFirstRender ? "auto" : "auto"
     });
   };
 
@@ -84,7 +87,7 @@ export const ServerView = () => {
   }, [serverId]);
 
   useEffect(() => {
-    const serverDocRef = doc(db, 'servers', serverId);
+    const serverDocRef = doc(db, "servers", serverId);
     const unsubscribe = onSnapshot(serverDocRef, (doc) => {
       if (doc.exists) {
         setServer(doc.data());
@@ -102,12 +105,12 @@ export const ServerView = () => {
       };
 
       await sendMessage(serverId, newMessage);
-      setMessage('');
+      setMessage("");
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       handleSendMessage();
     }
@@ -118,8 +121,8 @@ export const ServerView = () => {
     const currentDate = new Date();
 
     // Extract the time
-    const options = { hour: '2-digit', minute: '2-digit', hour12: true };
-    const time = date.toLocaleTimeString('en-US', options);
+    const options = { hour: "2-digit", minute: "2-digit", hour12: true };
+    const time = date.toLocaleTimeString("en-US", options);
 
     // Compare dates
     const diffInMilliseconds = currentDate - date;
@@ -143,22 +146,22 @@ export const ServerView = () => {
       return `Last week at ${time}`;
     } else {
       return (
-        date.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
+        date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
         }) + ` at ${time}`
       );
     }
   };
 
   const handleEditMessage = (index) => {
-    setMessageState({ ...messageState, [index]: 'editing' });
+    setMessageState({ ...messageState, [index]: "editing" });
   };
 
   const saveEditedMessage = async (index, newContent, messageId) => {
     await editMessage(serverId, messageId, newContent);
-    setMessageState({ ...messageState, [index]: 'normal' });
+    setMessageState({ ...messageState, [index]: "normal" });
   };
 
   const handleDeleteMessage = async (index, messageId) => {
@@ -167,6 +170,9 @@ export const ServerView = () => {
 
   const handleJoin = async (serverId, userId) => {
     await handleJoinServer(serverId, userId);
+    const hasSubscribed = await hasJoinedServer(serverId, userId);
+    setSubscribed(hasSubscribed);
+    localStorage.setItem(`subscribed_${serverId}`, hasSubscribed);
 
     // Update subscribed status after joining
     setSubscribed(true);
@@ -176,22 +182,23 @@ export const ServerView = () => {
 
   useEffect(() => {
     const checkSubscription = async () => {
-      const hasSubscribed = await hasJoinedServer(serverId, userId);
-      setSubscribed(hasSubscribed);
+      const hasSubscribed = localStorage.getItem(`subscribed_${serverId}`);
+      setSubscribed(hasSubscribed === "true");
     };
-
     checkSubscription();
   }, [serverId, userId]);
 
   return (
     <div className={styles.server}>
-      <button
-        onClick={() => !subscribed && handleJoin(serverId, userId.uid)}
-        key={server.serverName}
-        id={styles.joinButton}
-      >
-        {subscribed ? 'Joined' : 'Join'}
-      </button>
+      {!subscribed && (
+        <button
+          onClick={() => handleJoin(serverId, userId.uid)}
+          key={server.serverName}
+          id={styles.joinButton}
+        >
+          {subscribed ? "Joined" : "Join"}
+        </button>
+      )}
       <div className={styles.chat}>
         <div className={styles.messageContainer} ref={messageContainerRef}>
           {server.messages &&
@@ -199,7 +206,7 @@ export const ServerView = () => {
               <div key={msg.id} className={styles.messages}>
                 <strong className={styles.userName}>
                   <div>
-                    {displayNames[msg.senderId] || 'Unknown'}{' '}
+                    {displayNames[msg.senderId] || "Unknown"}{" "}
                     <span className={styles.timeStamp}>
                       {extractTime(msg.timestamp)}
                     </span>
@@ -210,50 +217,50 @@ export const ServerView = () => {
                       onClick={() => handleDeleteMessage(index, msg.id)}
                     >
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='32'
+                        height='32'
+                        viewBox='0 0 24 24'
                       >
                         <path
-                          fill="currentColor"
-                          d="M8 9h8v10H8z"
-                          opacity=".3"
+                          fill='currentColor'
+                          d='M8 9h8v10H8z'
+                          opacity='.3'
                         />
                         <path
-                          fill="currentColor"
-                          d="m15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"
+                          fill='currentColor'
+                          d='m15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z'
                         />
                       </svg>
                     </button>
-                    {messageState[index] !== 'editing' && (
+                    {messageState[index] !== "editing" && (
                       <button
                         onClick={() => handleEditMessage(index)}
                         className={styles.edit}
                       >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="32"
-                          height="32"
-                          viewBox="0 0 24 24"
+                          xmlns='http://www.w3.org/2000/svg'
+                          width='32'
+                          height='32'
+                          viewBox='0 0 24 24'
                         >
                           <path
-                            fill="currentColor"
-                            d="M3 21h3.75L17.81 9.94l-3.75-3.75L3 17.25V21zm2-2.92l9.06-9.06l.92.92L5.92 19H5v-.92zM18.37 3.29a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34z"
+                            fill='currentColor'
+                            d='M3 21h3.75L17.81 9.94l-3.75-3.75L3 17.25V21zm2-2.92l9.06-9.06l.92.92L5.92 19H5v-.92zM18.37 3.29a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34z'
                           />
                         </svg>
                       </button>
                     )}
                   </div>
-                </strong>{' '}
-                {messageState[index] === 'editing' ? (
+                </strong>{" "}
+                {messageState[index] === "editing" ? (
                   <input
                     defaultValue={msg.content}
                     onBlur={(e) =>
                       saveEditedMessage(index, e.target.value, msg.id)
                     }
                   />
-                ) : messageState[index] === 'deleted' ? (
+                ) : messageState[index] === "deleted" ? (
                   <em>Message deleted</em>
                 ) : (
                   msg.content
@@ -264,14 +271,15 @@ export const ServerView = () => {
         </div>
         <div className={styles.messageInput}>
           <input
-            type="text"
+            type='text'
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyPress}
-            placeholder="Type a message..."
+            placeholder='Type a message...'
           />
           <button onClick={handleSendMessage}>Send</button>
         </div>
+        <Users serverId={serverId} />
       </div>
     </div>
   );

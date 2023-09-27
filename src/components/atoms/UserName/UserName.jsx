@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from '../../../store/authState';
 import { getUser } from '../../../firebase/db';
+import styles from './UserName.module.scss';
 
 const UserDisplayName = ({ onLogout }) => {
   const { user, isLoggedIn } = useAuthState();
@@ -30,7 +31,7 @@ const UserDisplayName = ({ onLogout }) => {
   if (!isLoggedIn) return <span>Please log in.</span>;
 
   return (
-    <div>
+    <div className={styles.userNameContainer}>
       <span>Welcome, {userName}</span>
       <button onClick={onLogout}>Log Out</button>
     </div>

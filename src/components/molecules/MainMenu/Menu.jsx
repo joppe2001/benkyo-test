@@ -1,39 +1,63 @@
-import styles from './Menu.module.scss';
-import UserDisplayName from '../../atoms/UserName/UserName';
-import { logOut } from '../../../firebase/auth';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useRef, useEffect } from 'react';
+import styles from "./Menu.module.scss";
+import UserDisplayName from "../../atoms/UserName/UserName";
+import { logOut } from "../../../firebase/auth";
+import { useNavigate, Link } from "react-router-dom";
 
 const MainNav = () => {
-    const navigate = useNavigate();
-    const handleLogOut = () => {
-        logOut().then(() => {
-            navigate('/');
-        });
-    };
+  const navigate = useNavigate();
+  const navRef = useRef(null);
 
-    const toggleMenu = () => {
-        const menu = document.querySelector(`.${styles.navList}`);
-        menu.classList.toggle(styles.active);
-    };
+  const handleLogOut = () => {
+    logOut().then(() => {
+      navigate("/");
+    });
+  };
 
-    return (
-        <div className={styles.navContainer}>
-            <div className={styles.menuToggle} onClick={toggleMenu}>
-                ☰
-            </div>
-            <ul className={styles.navList}>
-                <li className={styles.navItem}>
-                    <Link to="/" className={styles.navLink}>Home</Link>
-                </li>
-                <li className={styles.navLink}>menuItemn</li>
-                <li className={styles.navLink}>menuItemn</li>
-                <li className={styles.navLink}>
-                    <UserDisplayName onLogout={handleLogOut} />
-                </li>
-            </ul>
-            <div className={styles.rightSide}></div>
-        </div>
-    );
+  const toggleMenu = () => {
+    const menu = navRef.current.querySelector(`.${styles.navList}`);
+    menu.classList.toggle(styles.active);
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        const menu = navRef.current.querySelector(`.${styles.navList}`);
+        menu.classList.remove(styles.active);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
+
+  return (
+    <div className={styles.navContainer} ref={navRef}>
+      <div className={styles.menuToggle} onClick={toggleMenu}>
+        ☰
+      </div>
+      <ul className={styles.navList}>
+        <li className={styles.navItem} onClick={toggleMenu}>
+          <Link to='/' className={styles.navLink}>
+            Home
+          </Link>
+        </li>
+        <li className={styles.navItem} onClick={toggleMenu}>
+          <Link to='/' className={styles.navLink}>
+            Home
+          </Link>
+        </li>
+        <li className={styles.navItem} onClick={toggleMenu}>
+          <Link to='/' className={styles.navLink}>
+            Home
+          </Link>
+        </li>
+          <UserDisplayName onLogout={handleLogOut} />
+      </ul>
+    </div>
+  );
 };
 
 export default MainNav;
