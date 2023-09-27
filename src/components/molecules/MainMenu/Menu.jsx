@@ -54,8 +54,8 @@ const MainNav = () => {
             Home
           </Link>
         </li>
-          <UserDisplayName onLogout={handleLogOut} />
       </ul>
+          <UserDisplayName onLogout={handleLogOut} />
     </div>
   );
 };

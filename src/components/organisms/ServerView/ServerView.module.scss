@@ -7,212 +7,281 @@ $header-height: 60px;
 @import "../../../mixins/for-device.scss";
 
 .server {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
-	background-color: $bg-color;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: $bg-color;
 
-	@include for-device("mobile") {
-		display: flex;
-		flex-direction: column;
-		height: 100vh;
-		background-color: $bg-color;
+  @include for-device("mobile") {
 
-		#joinButton {
-			position: absolute;
-			top: 12.5%;
-			right: 8.5%;
-			border: none;
-			border-radius: 10px;
-			padding: 0.5rem 1rem;
-			background-color: $primary-color;
-			color: white;
-			cursor: pointer;
-			transition: background-color 0.3s ease;
+    #joinButton {
+      position: absolute;
+      top: 12.5%;
+      right: 8.5%;
+      border: none;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      background-color: $primary-color;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
 
-			&:hover {
-				background-color: $button-hover;
-			}
-		}
+      &:hover {
+        background-color: $button-hover;
+      }
+    }
 
-		.chat {
-			position: relative;
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-			padding: 1rem;
-			height: calc(100vh - #{$header-height});
+    .chat {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      height: calc(100vh - #{$header-height});
 
-			.chatMessageContainer {
-				display: flex;
-				max-height: 100vh;
-			}
+      .chatMessageContainer {
+        display: flex;
+        max-height: 100vh;
+      }
 
-			.messageContainer {
-				flex: 1;
-				overflow-y: auto;
-				padding: 1rem;
-				border-radius: 10px;
-				background-color: rgba(255, 255, 255, 0.05);
-				gap: 1rem;
-				margin: 4rem 0 1rem 0;
-			}
-		}
+      .messageContainer {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.05);
+        gap: 1rem;
+        margin: 4rem 0 1rem 0;
+      }
+    }
 
-		@media screen and (max-width: 768px) {
-			#joinButton {
-				position: fixed;
-				bottom: 2.5%;
-				right: 2.5%;
-				z-index: 10; // To ensure it appears on top
-				width: 60px;
-				height: 60px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				border-radius: 50%;
-			}
+    @media screen and (max-width: 768px) {
+      #joinButton {
+        position: fixed;
+        bottom: 2.5%;
+        right: 2.5%;
+        z-index: 10; // To ensure it appears on top
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
 
-			.chat {
-				padding: 1rem 0.5rem;
+      .chat {
+        padding: 1rem 0.5rem;
 
-				.messageContainer {
-					margin: 2rem 0 1rem 0;
+        .messageContainer {
+          margin: 2rem 0 1rem 0;
 
-					.messages {
-						margin: 0.5rem 0.25rem;
-					}
-				}
+          .messages {
+            margin: 0.5rem 0.25rem;
+          }
+        }
 
-				.messageInput {
-					gap: 0.5rem; // Reduced gap for mobile
-				}
-			}
-		}
-	}
+        .messageInput {
+          gap: 0.5rem; // Reduced gap for mobile
+        }
+      }
+    }
+}
+  #joinButton {
+    position: absolute;
+    top: 12.5%;
+    right: 2.5%;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    background-color: $primary-color;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 
-	#joinButton {
-		position: absolute;
-		top: 12.5%;
-		right: 2.5%;
-		border: none;
-		border-radius: 10px;
-		padding: 0.5rem 1rem;
-		background-color: $primary-color;
-		color: white;
-		cursor: pointer;
-		transition: background-color 0.3s ease;
+    &:hover {
+      background-color: $button-hover;
+    }
+  }
 
-		&:hover {
-			background-color: $button-hover;
-		}
-	}
+  .chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    height: calc(100vh - #{$header-height});
 
-	.chat {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
-		height: calc(100vh - #{$header-height});
+    .messageContainer {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.05);
+      gap: 1rem;
+      margin: 4rem 0 1rem 0;
 
-		.messageContainer {
-			flex: 1;
-			overflow-y: auto;
-			padding: 1rem;
-			border-radius: 10px;
-			background-color: rgba(255, 255, 255, 0.05);
-			gap: 1rem;
-			margin: 4rem 0 1rem 0;
+      .messages {
+        position: relative;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        background-color: $input-bg-color;
+        color: white;
+        max-width: 70%;
+        align-self: flex-end; // Assuming messages are from the user. If they're from others, use flex-start
+        margin: 1rem 0.5rem;
+        display: flex;
+        flex-direction: column;
 
-			.messages {
-				position: relative;
-				padding: 0.5rem 1rem;
-				border-radius: 8px;
-				background-color: $input-bg-color;
-				color: white;
-				max-width: 70%;
-				align-self: flex-end; // Assuming messages are from the user. If they're from others, use flex-start
-				margin: 1rem 0.5rem;
-				display: flex;
-				flex-direction: column;
+        .settings {
+          display: none;
+        }
 
-				.settings {
-					display: none;
-				}
+        &:hover .settings {
+          display: block;
+          border: none;
+          position: absolute;
+          right: 0;
+          top: 50%;
+          display: flex;
+          justify-content: center;
 
-				&:hover .settings {
-					display: block;
-					border: none;
-					position: absolute;
-					right: 0;
-					top: 50%;
-					display: flex;
-					justify-content: center;
+          button {
+            background-color: transparent;
+            border: none;
+          }
 
-					button {
-						background-color: transparent;
-						border: none;
-					}
+          svg {
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
 
-					svg {
-						color: white;
-						font-size: 1.2rem;
-						cursor: pointer;
-						transition: color 0.3s ease;
+            &:hover {
+              color: $primary-color;
+            }
+          }
+        }
 
-						&:hover {
-							color: $primary-color;
-						}
-					}
-				}
+        .userName {
+          position: relative;
+          margin-bottom: 0.5rem;
+          height: 100%;
+          display: flex;
+          justify-content: space-between;
+        }
+        .timeStamp {
+          font-weight: 300;
+          font-size: 0.8rem;
+          opacity: 0.8;
+        }
+      }
+    }
 
-				.userName {
-					position: relative;
-					margin-bottom: 0.5rem;
-					height: 100%;
-					display: flex;
-					justify-content: space-between;
-				}
-				.timeStamp {
-					font-weight: 300;
-					font-size: 0.8rem;
-					opacity: 0.8;
-				}
-			}
-		}
+    .messageInput {
+      display: flex;
+      gap: 1rem;
 
-		.messageInput {
-			display: flex;
-			gap: 1rem;
+      input {
+        flex: 1;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        border: none;
+        background-color: $input-bg-color;
+        color: white;
+        outline: none;
 
-			input {
-				flex: 1;
-				padding: 0.5rem 1rem;
-				border-radius: 10px;
-				border: none;
-				background-color: $input-bg-color;
-				color: white;
-				outline: none;
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.5);
+        }
+      }
 
-				&::placeholder {
-					color: rgba(255, 255, 255, 0.5);
-				}
-			}
+      button {
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 10px;
+        background-color: $primary-color;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
 
-			button {
-				padding: 0.5rem 1.5rem;
-				border: none;
-				border-radius: 10px;
-				background-color: $primary-color;
-				color: white;
-				cursor: pointer;
-				transition: background-color 0.3s ease;
+        &:hover {
+          background-color: $button-hover;
+        }
+      }
+    }
+  }
+}
+.usersDisplay {
+  position: absolute;
+  top: 20%;
+  right: 0;
+  width: 20%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  border-radius: 5px 0 0 5px;
 
-				&:hover {
-					background-color: $button-hover;
-				}
-			}
-		}
-	}
+  @include for-device('mobile') {
+	width: 40%;
+  }
+
+  &.childHidden {
+    background-color: transparent; // or any other style you want
+	backdrop-filter: none;
+	width: 20%;
+  }
+
+  button {
+    align-self: flex-end;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  .contentWrapper {
+    flex: 1;
+    transition: transform 0.3s ease;
+    transform: translateX(0);
+
+    &.hidden {
+      transform: translateX(100%);
+    }
+
+    .showing {
+      transform: translateX(-100%);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 1rem 0;
+      overflow-y: auto;
+
+      li {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin: 0.5rem 0;
+		text-align: center;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
 }

@@ -9,7 +9,10 @@
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     right: 4.5%;
-    margin-top: 5px;
+
+    @include for-device('mobile') {
+        margin: 5px 1rem;
+    }
 
     span {
         font-size: 1rem;

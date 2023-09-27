@@ -1,86 +1,89 @@
-@import '../../../mixins/for-device.scss';
+@import "../../../mixins/for-device.scss";
 
 .navContainer {
-    position: absolute;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    z-index: 999;
-    top: 0;
-    width: 100%;
-    
-    @include for-device('desktop') {
-        justify-content: flex-start;
-        gap: 2rem;
-    }
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  z-index: 999;
+  top: 0;
+  width: 100%;
+  background: #1c1c1c;
+
+  @include for-device("desktop") {
+    justify-content: flex-start;
+    gap: 2rem;
+  }
 }
 
 .menuToggle {
-    font-size: 2rem;
-    cursor: pointer;
+  font-size: 2rem;
+  cursor: pointer;
 
-    @include for-device('desktop') {
-        display: none;
-    }
+  @include for-device("desktop") {
+    display: none;
+  }
 }
 
 .navList {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: none;
-    flex-direction: column;
-    gap: 1rem;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    width: 200px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 0 5px 5px 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: rgb(68, 63, 63);
+  width: 200px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0 5px 5px 0;
 
-    &.active {
-        display: flex;
-    }
-    
-    .userName {
-        position: relative;
-        right: 0;
-    }
+  &.active {
+    display: flex;
+  }
 
-    @include for-device('desktop') {
-        display: flex;
-        flex-direction: row;
-        gap: 2rem;
-        position: static;
-        width: auto;
-        background-color: transparent;
-        box-shadow: none;
-    }
+  .userName {
+    position: relative;
+    right: 0;
+  }
+
+  @include for-device("desktop") {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    position: static;
+    width: auto;
+    background-color: transparent;
+    box-shadow: none;
+  }
 }
 
 .navItem {
-    margin: 0;
+  margin: 0;
 
-    .navLink {
-        text-decoration: none;
-        color: #333;
-        padding: 1rem;
-        display: block;
+  .navLink {
+    text-decoration: none;
+    color: white;
+    padding: 1rem;
+    display: block;
+    transition: background-color 0.3s ease;
 
-        &:hover {
-            background-color: #f6f6f6;
-        }
-
-        @include for-device('desktop') {
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-
-            &:hover {
-                background-color: #eee;
-                color: #555;
-            }
-        }
+    &:hover {
+      background-color: #f6f6f6;
+      color: black;
     }
+
+    @include for-device("desktop") {
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+
+      &:hover {
+        background-color: #eee;
+        color: #555;
+      }
+    }
+  }
 }

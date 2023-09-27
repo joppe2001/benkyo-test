@@ -335,8 +335,8 @@ export const hasJoinedServer = async (serverId, user) => {
 };
 
 export const deleteMessagesFromUnknowUser = async (serverId) => {
- // usign the users collection and the servers collection[messages] to delete messages from unknow users
- try {
+  // usign the users collection and the servers collection[messages] to delete messages from unknow users
+  try {
     const serverDocRef = doc(db, 'servers', serverId);
     const serverDoc = await getDoc(serverDocRef);
 
@@ -388,4 +388,4 @@ export const getUsersFromServer = async (serverId) => {
     console.error('Error getting users from server:', error);
     return [];
   }
-}
+};

@@ -11,9 +11,10 @@ import {
   deleteMessage,
   editMessage,
   handleJoinServer,
-  hasJoinedServer
+  hasJoinedServer,
+  getUsersFromServer,
+  getUser
 } from "../../../firebase/db";
-import Users from "../../molecules/UsersDisplay/Users";
 
 export const ServerView = () => {
   const { serverId } = useParams();
@@ -25,6 +26,22 @@ export const ServerView = () => {
   const [subscribed, setSubscribed] = useState(
     localStorage.getItem(`subscribed_${serverId}`) === "true"
   );
+  const [users, setUsers] = useState([]);
+  const [isUsersVisible, setUsersVisibility] = useState(false);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const users = await getUsersFromServer(serverId);
+      const userNames = await Promise.all(
+        users.map(async (user) => {
+          const userName = await getUser(user);
+          return userName;
+        })
+      );
+      setUsers(userNames);
+    };
+    fetchUsers();
+  }, [serverId, server.users]);
 
   const { user } = useAuthState();
 
@@ -188,6 +205,10 @@ export const ServerView = () => {
     checkSubscription();
   }, [serverId, userId]);
 
+  const toggleUsersVisibility = () => {
+    setUsersVisibility((prevState) => !prevState);
+  };
+
   return (
     <div className={styles.server}>
       {!subscribed && (
@@ -279,7 +300,36 @@ export const ServerView = () => {
           />
           <button onClick={handleSendMessage}>Send</button>
         </div>
-        <Users serverId={serverId} />
+        <div
+          className={
+            isUsersVisible
+              ? styles.usersDisplay
+              : `${styles.usersDisplay} ${styles.childHidden}`
+          }
+        >
+          <button onClick={toggleUsersVisibility}>
+            {isUsersVisible ? "✖" : "👥"}
+          </button>
+          <div
+            className={
+              isUsersVisible
+                ? styles.contentWrapper
+                : `${styles.contentWrapper} ${styles.hidden}`
+            }
+          >
+            {isUsersVisible && (
+              <ul>
+                {users?.map((user) => {
+                  return (
+                    <li key={user?.displayName}>
+                      {user?.displayName || "placeholder Name"}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
