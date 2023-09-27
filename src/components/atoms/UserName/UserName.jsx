@@ -28,11 +28,10 @@ const UserDisplayName = ({ onLogout }) => {
     fetchUserInfo();
   }, [isLoggedIn, user]);
 
-  if (!isLoggedIn) return <span>Please log in.</span>;
+  if (!isLoggedIn) return <span></span>;
 
   return (
     <div className={styles.userNameContainer}>
-      <span>Welcome, {userName}</span>
       <button onClick={onLogout}>Log Out</button>
     </div>
   );

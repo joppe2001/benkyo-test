@@ -75,8 +75,9 @@
 
         button,
         input {
-          height: 7vh;
-          padding: 0 3px;
+          height: 4.5vh;
+          width: auto;
+          padding: 0 1rem;
           font-size: 1.4rem;
         }
       }
@@ -115,6 +116,39 @@
         @include for-device(mobile) {
           width: 25vw;
           top: 90%;
+        }
+      }
+    }
+    .alternativeButtonsContainer {
+      // these will be small icons like google, github, etc. to login with
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 30vw;
+      height: 5vh;
+      border-radius: 100%;
+      transition: all 0.3s ease-in-out;
+      padding: 0 5px;
+
+      button {
+        background-color: transparent;
+        border: none;
+        transition: all 0.2s ease-in-out;
+
+        &:hover svg {
+          transform: scale(1.1);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+        
+        svg {
+          border-radius: 50%;
+          transition: all 0.2s ease-in-out;
+
+        }
+
+        &:hover {
+          cursor: pointer;
         }
       }
     }

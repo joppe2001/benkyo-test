@@ -15,6 +15,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  GithubAuthProvider,
 } from 'firebase/auth';
 
 export const db = getFirestore(app);
@@ -65,6 +66,30 @@ export const createUserWithGoogle = async () => {
     console.error('Error creating user:', error);
   }
 };
+
+export const createUserWithGithub = async () => {
+  try {
+    const { user } = await signInWithPopup(
+      auth,
+      new GithubAuthProvider()
+    );
+
+    if (user) {
+      const userDocRef = doc(db, 'users', user.uid);
+
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        servers: [],
+      });
+
+      console.log('User created and logged in successfully');
+    }
+  } catch (error) {
+    console.error('Error creating user:', error);
+  }
+}
 
 export const getUser = async (uid) => {
   try {

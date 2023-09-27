@@ -1,15 +1,15 @@
-import Form from '../../components/molecules/form/Form';
-import styles from './Login.module.scss';
-import background from '../../images/binky-login.jpg';
-import { login, signup, auth } from '../../firebase/auth';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ErrorMessage } from '../../components/atoms/ErrorMessage/ErrorMessage';
-import { createUserWithGoogle } from '../../firebase/db';
+import Form from "../../components/molecules/form/Form";
+import styles from "./Login.module.scss";
+import background from "../../images/binky-login.jpg";
+import { login, signup, auth } from "../../firebase/auth";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ErrorMessage } from "../../components/atoms/ErrorMessage/ErrorMessage";
+import { createUserWithGoogle, createUserWithGithub } from "../../firebase/db";
 
 const Login = () => {
   const [showLogin, setShowLogin] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -23,64 +23,64 @@ const Login = () => {
 
   const commonFields = [
     {
-      label: 'email',
-      name: 'email',
-      type: 'text',
-      placeholder: 'Email'
+      label: "email",
+      name: "email",
+      type: "text",
+      placeholder: "Email"
     },
     {
-      label: 'Password',
-      name: 'password',
-      type: 'password',
-      placeholder: 'Password'
+      label: "Password",
+      name: "password",
+      type: "password",
+      placeholder: "Password"
     }
   ];
 
   const signUpFields = [
     {
-      label: 'Display Name',
-      name: 'displayName',
-      type: 'text',
-      placeholder: 'Display Name'
+      label: "Display Name",
+      name: "displayName",
+      type: "text",
+      placeholder: "Display Name"
     },
     ...commonFields,
     {
-      label: 'Confirm Password',
-      name: 'confirmPassword',
-      type: 'password',
-      placeholder: 'Confirm Password'
+      label: "Confirm Password",
+      name: "confirmPassword",
+      type: "password",
+      placeholder: "Confirm Password"
     }
   ];
   const handleAuth = async (data) => {
     if (showLogin) {
       login(data.email, data.password)
         .then(() => {
-          setMessage('You have successfully logged in!');
-          navigate('/');
-          setTimeout(() => setMessage(''), 3000);
+          setMessage("You have successfully logged in!");
+          navigate("/");
+          setTimeout(() => setMessage(""), 3000);
         })
         .catch(() => {
-          setMessage('Incorrect login credentials. Please try again.');
+          setMessage("Incorrect login credentials. Please try again.");
         });
     } else {
       signup(data.email, data.password, data.displayName)
         .then(() => {
           if (data.email.length !== 0 && data.password.length !== 0) {
-            setMessage('You have successfully signed up!');
-            navigate('/');
-            setTimeout(() => setMessage(''), 3000);
+            setMessage("You have successfully signed up!");
+            navigate("/");
+            setTimeout(() => setMessage(""), 3000);
           }
-          setMessage('we Need your email and password to sign you up');
-          setTimeout(() => setMessage(''), 4000);
+          setMessage("we Need your email and password to sign you up");
+          setTimeout(() => setMessage(""), 4000);
         })
         .catch(() => {
           if (data.email.length === 0 || data.password.length === 0) {
-            setMessage('we need your email and password to sign you up');
+            setMessage("we need your email and password to sign you up");
           } else if (data.password !== data.confirmPassword) {
-            setMessage('passwords do not match');
+            setMessage("passwords do not match");
           } else if (data.password.length < 6 || data.email.length < 10) {
             setMessage(
-              'password and email must be at least 6 - 10 characters long'
+              "password and email must be at least 6 - 10 characters long"
             );
           }
         });
@@ -88,48 +88,107 @@ const Login = () => {
   };
 
   const handleGoogleSignup = async () => {
-    await createUserWithGoogle('', '');
+    await createUserWithGoogle("", "");
 
     const currentUser = auth.currentUser;
     if (currentUser) {
-        setMessage('You have successfully signed up with Google!');
-        navigate('/');
-        setTimeout(() => setMessage(''), 3000);
+      setMessage("You have successfully signed up with Google!");
+      navigate("/");
+      setTimeout(() => setMessage(""), 3000);
     } else {
-        setMessage('There was an issue signing up with Google.');
+      setMessage("There was an issue signing up with Google.");
     }
-};
+  };
 
-const googleSvg = <svg xmlns="http://www.w3.org/2000/svg" width="97.53" height="32" viewBox="0 0 512 168"><path fill="#FF302F" d="m496.052 102.672l14.204 9.469c-4.61 6.79-15.636 18.44-34.699 18.44c-23.672 0-41.301-18.315-41.301-41.614c0-24.793 17.816-41.613 39.308-41.613c21.616 0 32.206 17.193 35.633 26.475l1.869 4.735l-55.692 23.049c4.236 8.348 10.84 12.584 20.183 12.584c9.345 0 15.823-4.61 20.495-11.525ZM452.384 87.66l37.19-15.45c-2.056-5.17-8.16-8.845-15.45-8.845c-9.281 0-22.176 8.223-21.74 24.295Z"/><path fill="#20B15A" d="M407.407 4.931h17.94v121.85h-17.94V4.93Z"/><path fill="#3686F7" d="M379.125 50.593h17.318V124.6c0 30.711-18.128 43.357-39.558 43.357c-20.183 0-32.33-13.58-36.878-24.606l15.885-6.604c2.865 6.79 9.78 14.827 20.993 14.827c13.767 0 22.24-8.535 22.24-24.482v-5.98h-.623c-4.112 4.983-11.961 9.468-21.928 9.468c-20.807 0-39.87-18.128-39.87-41.488c0-23.486 19.063-41.8 39.87-41.8c9.905 0 17.816 4.423 21.928 9.282h.623v-5.98Zm1.245 38.499c0-14.702-9.78-25.417-22.239-25.417c-12.584 0-23.174 10.715-23.174 25.417c0 14.514 10.59 25.042 23.174 25.042c12.46.063 22.24-10.528 22.24-25.042Z"/><path fill="#FF302F" d="M218.216 88.78c0 23.984-18.688 41.613-41.613 41.613c-22.924 0-41.613-17.691-41.613-41.613c0-24.108 18.689-41.675 41.613-41.675c22.925 0 41.613 17.567 41.613 41.675Zm-18.19 0c0-14.95-10.84-25.23-23.423-25.23c-12.583 0-23.423 10.28-23.423 25.23c0 14.826 10.84 25.23 23.423 25.23c12.584 0 23.423-10.404 23.423-25.23Z"/><path fill="#FFBA40" d="M309.105 88.967c0 23.984-18.689 41.613-41.613 41.613c-22.925 0-41.613-17.63-41.613-41.613c0-24.108 18.688-41.613 41.613-41.613c22.924 0 41.613 17.443 41.613 41.613Zm-18.253 0c0-14.95-10.839-25.23-23.423-25.23c-12.583 0-23.423 10.28-23.423 25.23c0 14.826 10.84 25.23 23.423 25.23c12.646 0 23.423-10.466 23.423-25.23Z"/><path fill="#3686F7" d="M66.59 112.328c-26.102 0-46.534-21.056-46.534-47.158c0-26.101 20.432-47.157 46.534-47.157c14.079 0 24.357 5.544 31.957 12.646l12.522-12.521C100.479 7.984 86.338.258 66.59.258C30.833.259.744 29.414.744 65.17c0 35.758 30.089 64.912 65.846 64.912c19.312 0 33.889-6.354 45.289-18.19c11.711-11.712 15.324-28.158 15.324-41.489c0-4.174-.498-8.472-1.059-11.649H66.59v17.318h42.423c-1.246 10.84-4.672 18.253-9.718 23.298c-6.105 6.168-15.76 12.958-32.705 12.958Z"/></svg>
+  const handleGithubSignup = async () => {
+    await createUserWithGithub("", "");
 
-const GoogleSignUpButton = () => (
-  <button onClick={handleGoogleSignup}>{googleSvg}</button>
-);
-const GoogleSignInButton = () => (
-  <button onClick={handleGoogleSignup}>{googleSvg}</button>
-);
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setMessage("You have successfully signed up with Github!");
+      navigate("/");
+      setTimeout(() => setMessage(""), 3000);
+    } else {
+      setMessage("There was an issue signing up with Github.");
+    }
+  }
+
+  const googleSvg = (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='31.27'
+      height='32'
+      viewBox='0 0 256 262'
+    >
+      <path
+        fill='#4285F4'
+        d='M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027'
+      />
+      <path
+        fill='#34A853'
+        d='M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1'
+      />
+      <path
+        fill='#FBBC05'
+        d='M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782'
+      />
+      <path
+        fill='#EB4335'
+        d='M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251'
+      />
+    </svg>
+  );
+
+  const githubSvg = (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='32'
+      height='32'
+      viewBox='0 0 24 24'
+    >
+      <path
+        fill='currentColor'
+        d='M12 0a12 12 0 1 0 0 24a12 12 0 0 0 0-24zm3.163 21.783h-.093a.513.513 0 0 1-.382-.14a.513.513 0 0 1-.14-.372v-1.406c.006-.467.01-.94.01-1.416a3.693 3.693 0 0 0-.151-1.028a1.832 1.832 0 0 0-.542-.875a8.014 8.014 0 0 0 2.038-.471a4.051 4.051 0 0 0 1.466-.964c.407-.427.71-.943.885-1.506a6.77 6.77 0 0 0 .3-2.13a4.138 4.138 0 0 0-.26-1.476a3.892 3.892 0 0 0-.795-1.284a2.81 2.81 0 0 0 .162-.582c.033-.2.05-.402.05-.604c0-.26-.03-.52-.09-.773a5.309 5.309 0 0 0-.221-.763a.293.293 0 0 0-.111-.02h-.11c-.23.002-.456.04-.674.111a5.34 5.34 0 0 0-.703.26a6.503 6.503 0 0 0-.661.343c-.215.127-.405.249-.573.362a9.578 9.578 0 0 0-5.143 0a13.507 13.507 0 0 0-.572-.362a6.022 6.022 0 0 0-.672-.342a4.516 4.516 0 0 0-.705-.261a2.203 2.203 0 0 0-.662-.111h-.11a.29.29 0 0 0-.11.02a5.844 5.844 0 0 0-.23.763c-.054.254-.08.513-.081.773c0 .202.017.404.051.604c.033.199.086.394.16.582A3.888 3.888 0 0 0 5.702 10a4.142 4.142 0 0 0-.263 1.476a6.871 6.871 0 0 0 .292 2.12c.181.563.483 1.08.884 1.516c.415.422.915.75 1.466.964c.653.25 1.337.41 2.033.476a1.828 1.828 0 0 0-.452.633a2.99 2.99 0 0 0-.2.744a2.754 2.754 0 0 1-1.175.27a1.788 1.788 0 0 1-1.065-.3a2.904 2.904 0 0 1-.752-.824a3.1 3.1 0 0 0-.292-.382a2.693 2.693 0 0 0-.372-.343a1.841 1.841 0 0 0-.432-.24a1.2 1.2 0 0 0-.481-.101c-.04.001-.08.005-.12.01a.649.649 0 0 0-.162.02a.408.408 0 0 0-.13.06a.116.116 0 0 0-.06.1a.33.33 0 0 0 .14.242c.093.074.17.131.232.171l.03.021c.133.103.261.214.382.333c.112.098.213.209.3.33c.09.119.168.246.231.381c.073.134.15.288.231.463c.188.474.522.875.954 1.145c.453.243.961.364 1.476.351c.174 0 .349-.01.522-.03c.172-.028.343-.057.515-.091v1.743a.5.5 0 0 1-.533.521h-.062a10.286 10.286 0 1 1 6.324 0v.005z'
+      />
+    </svg>
+  );
+
+  // atleast 3 buttons so make some templates, they need an onclick and an svg
+  const alternativeButtons = [
+    {
+      onClick: handleGoogleSignup,
+      svg: googleSvg
+    },
+    {
+      onClick: handleGithubSignup,
+      svg: githubSvg
+    }
+  ];
 
   return (
     <div className={styles.login}>
       <div className={styles.header}>
-        <h1>{showLogin ? 'Log In ' : 'Sign Up '}</h1>
+        <h1>{showLogin ? "Log In " : "Sign Up "}</h1>
         <button onClick={() => setShowLogin(!showLogin)}>
-          {showLogin ? '/ Signup' : '/ Login'}
+          {showLogin ? "/ Signup" : "/ Login"}
         </button>
       </div>
       <div className={styles.imageContainer}>
-        <img src={background} alt="imag" className={styles.image} />
+        <img src={background} alt='imag' className={styles.image} />
       </div>
       <Form
-      fields={showLogin ? commonFields : signUpFields}
-      onSubmit={handleAuth}
-      customSubmitButton={
-        showLogin 
-          ? <><input type="submit" value="Log In" className={styles.googleLogSign}/><GoogleSignInButton /></>
-          : <><input type="submit" value="Sign Up" className={styles.googleLogSign}/><GoogleSignUpButton /></>
-      }
-    />
-      {message && <ErrorMessage msg={message} />}{' '}
+        fields={showLogin ? commonFields : signUpFields}
+        onSubmit={handleAuth}
+        customSubmitButton={
+          <input type='submit' value={showLogin ? "Log In" : "Sign Up"} />
+        }
+        alternButtons={alternativeButtons.map((button, index) => (
+          <button key={index} onClick={button.onClick}>
+            {button.svg}
+          </button>
+        ))}
+      />
+      {message && <ErrorMessage msg={message} />}{" "}
     </div>
   );
 };

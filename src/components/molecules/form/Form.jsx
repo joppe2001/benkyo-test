@@ -1,7 +1,14 @@
 import React from "react";
 import styles from "./Form.module.scss";
 
-const Form = ({ fields, title, onSubmit, submitTitle, customSubmitButton }) => {
+const Form = ({
+  fields,
+  title,
+  onSubmit,
+  submitTitle,
+  customSubmitButton,
+  alternButtons
+}) => {
   const handleDataCollection = (e) => {
     e.preventDefault(); // Add this to prevent the default form submission behavior
 
@@ -43,6 +50,13 @@ const Form = ({ fields, title, onSubmit, submitTitle, customSubmitButton }) => {
               />
             </div>
           ))}
+        <div className={styles.alternativeButtonsContainer}>
+          {alternButtons && (
+            <div className={styles.alternativeButtons}>
+              {alternButtons}
+            </div>
+          )}
+        </div>
         <div className={styles.buttonContainer}>
           {customSubmitButton && (
             <div className={styles.customButtonContainer}>

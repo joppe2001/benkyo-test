@@ -5,14 +5,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
   z-index: 999;
   top: 0;
   width: 100%;
   background: #1c1c1c;
+  padding: 5px 0;
 
   @include for-device("desktop") {
-    justify-content: flex-start;
     gap: 2rem;
   }
 }
@@ -20,6 +19,7 @@
 .menuToggle {
   font-size: 2rem;
   cursor: pointer;
+  padding: 5px;
 
   @include for-device("desktop") {
     display: none;
@@ -67,9 +67,10 @@
   .navLink {
     text-decoration: none;
     color: white;
-    padding: 1rem;
+    padding: 0.5rem;
     display: block;
     transition: background-color 0.3s ease;
+
 
     &:hover {
       background-color: #f6f6f6;
