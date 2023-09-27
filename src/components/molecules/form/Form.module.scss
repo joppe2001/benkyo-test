@@ -1,4 +1,4 @@
-@import '../../../mixins/for-device.scss';
+@import "../../../mixins/for-device.scss";
 
 .formContainer {
   position: relative;
@@ -67,24 +67,49 @@
       transition: background-color 0.3s ease-in-out;
       height: 8vh;
 
-      button, input {
+      .customButtonContainer {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        align-items: center;
+
+        button,
+        input {
+          height: 7vh;
+          padding: 0 3px;
+          font-size: 1.4rem;
+        }
+      }
+
+      button,
+      input {
         border: none;
         border-radius: 5px;
-        color: #3B3751;
+        color: #3b3751;
         font-size: 1.5rem;
         font-weight: 500;
         cursor: pointer;
-        background-color: #e54b4b;
         z-index: 998;
-        padding: 0.5rem 1rem;
         transition: all 0.3s, color 0.3s;
         backdrop-filter: blur(15px);
         box-shadow: 9px 7px 9px rgba(89, 88, 88, 0.55);
         width: 20vh;
-          &:hover {
-          background-color: #3B3751;
+        background-color: #e54b4b;
+
+        &:hover {
+          background-color: #3b3751;
           color: #e54b4b;
-          // box-shadow: 13px 14px 9px #3c3751b5;
+        }
+
+        &:last-child {
+          background-color: #3b375100;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            background-color: #0000009b;
+          }
         }
 
         @include for-device(mobile) {

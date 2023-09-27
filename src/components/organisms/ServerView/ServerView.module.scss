@@ -18,7 +18,6 @@ $header-height: 60px;
 		height: 100vh;
 		background-color: $bg-color;
 
-		// Desktop styles for the join button
 		#joinButton {
 			position: absolute;
 			top: 12.5%;
@@ -51,19 +50,10 @@ $header-height: 60px;
 				background-color: rgba(255, 255, 255, 0.05);
 				gap: 1rem;
 				margin: 4rem 0 1rem 0;
-
-				.messages {
-					// Rest of the styles...
-				}
-			}
-
-			.messageInput {
-				// Rest of the styles...
 			}
 		}
 
 		@media screen and (max-width: 768px) {
-			// Mobile styles
 			#joinButton {
 				position: fixed;
 				bottom: 2.5%;

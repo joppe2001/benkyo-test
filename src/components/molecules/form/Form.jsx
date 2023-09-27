@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './Form.module.scss';
+import React from "react";
+import styles from "./Form.module.scss";
 
 const Form = ({ fields, title, onSubmit, submitTitle, customSubmitButton }) => {
   const handleDataCollection = (e) => {
@@ -18,7 +18,7 @@ const Form = ({ fields, title, onSubmit, submitTitle, customSubmitButton }) => {
       fields.forEach((field) => {
         const inputElement = document.getElementById(field.name);
         if (inputElement) {
-          inputElement.value = '';
+          inputElement.value = "";
         }
       });
     } else {
