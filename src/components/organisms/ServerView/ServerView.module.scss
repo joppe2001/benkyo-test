@@ -14,7 +14,6 @@ $header-height: 60px;
   background-color: $bg-color;
 
   @include for-device("mobile") {
-
     #joinButton {
       position: absolute;
       top: 12.5%;
@@ -86,7 +85,7 @@ $header-height: 60px;
         }
       }
     }
-}
+  }
   #joinButton {
     position: absolute;
     top: 12.5%;
@@ -225,14 +224,14 @@ $header-height: 60px;
   z-index: 10;
   border-radius: 5px 0 0 5px;
 
-  @include for-device('mobile') {
-	width: 40%;
+  @include for-device("mobile") {
+    width: 40%;
   }
 
   &.childHidden {
     background-color: transparent; // or any other style you want
-	backdrop-filter: none;
-	width: 20%;
+    backdrop-filter: none;
+    width: 20%;
   }
 
   button {
@@ -276,7 +275,7 @@ $header-height: 60px;
         cursor: pointer;
         transition: background-color 0.3s ease;
         margin: 0.5rem 0;
-		text-align: center;
+        text-align: center;
 
         &:hover {
           background-color: rgba(255, 255, 255, 0.2);
