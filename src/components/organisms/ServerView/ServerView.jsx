@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { getServerById } from "../../../firebase/db";
 import styles from "./ServerView.module.scss";
 import { sendMessage } from "../../../firebase/db";
@@ -7,7 +7,6 @@ import { useAuthState } from "../../../store/authState";
 import { doc, onSnapshot } from "firebase/firestore";
 import {
   db,
-  userNameFromMessageSenderId,
   deleteMessage,
   editMessage,
   handleJoinServer,
@@ -25,8 +24,6 @@ export const ServerView = () => {
   const { serverId } = useParams();
   const [server, setServer] = useState({});
   const [message, setMessage] = useState(""); // For input value
-  const [messageState, setMessageState] = useState({});
-  const [displayNames, setDisplayNames] = useState({}); // For display names of users in server
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [subscribed, setSubscribed] = useState(
     localStorage.getItem(`subscribed_${serverId}`) === "true"
@@ -53,39 +50,17 @@ export const ServerView = () => {
   const messagesEndRef = useRef(null);
   const messageContainerRef = useRef(null);
 
-  const userName = async (senderId) => {
-    const userName = await userNameFromMessageSenderId(senderId);
-    return userName;
-  };
-
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({
       behavior: !isFirstRender ? "auto" : "auto"
     });
-  };
+  }, [isFirstRender]);
+
 
   useEffect(() => {
     scrollToBottom(false);
     setIsFirstRender(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const fetchDisplayNames = async () => {
-      const newDisplayNames = {};
-
-      for (let msg of server.messages || []) {
-        if (!newDisplayNames[msg.senderId]) {
-          const name = await userName(msg.senderId);
-          if (name) {
-            newDisplayNames[msg.senderId] = name;
-          }
-        }
-      }
-      setDisplayNames(newDisplayNames);
-    };
-    fetchDisplayNames();
-  }, [server.messages]);
+  }, [scrollToBottom]);
 
   useEffect(() => {
     if (isFirstRender) {
@@ -135,45 +110,6 @@ export const ServerView = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleSendMessage();
-    }
-  };
-
-  const extractTime = (isoString) => {
-    const date = new Date(isoString);
-    const currentDate = new Date();
-
-    // Extract the time
-    const options = { hour: "2-digit", minute: "2-digit", hour12: true };
-    const time = date.toLocaleTimeString("en-US", options);
-
-    // Compare dates
-    const diffInMilliseconds = currentDate - date;
-    const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
-
-    if (diffInSeconds < 60) {
-      return ``;
-    }
-    if (diffInMinutes < 60) {
-      return `${diffInMinutes} minutes ago`;
-    } else if (diffInHours < 24) {
-      return `${diffInHours} hours ago at ${time}`;
-    } else if (diffInDays === 1) {
-      return `Yesterday at ${time}`;
-    } else if (diffInDays < 7) {
-      return `${diffInDays} days ago at ${time}`;
-    } else if (diffInDays < 14) {
-      return `Last week at ${time}`;
-    } else {
-      return (
-        date.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric"
-        }) + ` at ${time}`
-      );
     }
   };
 

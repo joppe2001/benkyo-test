@@ -1,38 +1,36 @@
-$bg-color: #242424;
-$primary-color: #e54b4b;
-$input-bg-color: #3a3a3a;
-$button-hover: #f56565;
-$header-height: 60px;
-
-// .userList {
-//   position: fixed;
-//   top: 0;
-//   right: 0;
-//   width: 200px; // Adjust the width as needed
-//   height: 100vh;
-//   overflow-y: auto;
-//   padding: 1rem;
-//   background-color: rgba(0, 0, 0, 0.7); // Semi-transparent black background
-//   backdrop-filter: blur(10px);
-//   border-left: 1px solid rgba(255, 255, 255, 0.1);
-//   z-index: 10; // Ensure it's above other elements
-
-//   list-style-type: none;
-//   margin: 0;
-//   padding: 0;
-
-//   li {
-//     padding: 0.5rem;
-//     border-radius: 5px;
-//     background-color: rgba(255, 255, 255, 0.1);
-//     color: white; // Ensure this contrasts well with the background
-//     font-size: 1rem; // Adjust font size for better visibility
-//     margin-bottom: 0.5rem;
-//     text-align: center;
-//     transition: background-color 0.3s ease;
-
-//     &:hover {
-//       background-color: rgba(255, 255, 255, 0.2);
-//     }
-//   }
-// }
+@import '../../../variables';
+.userList {
+  // user list needs to be displayed on the right side of the screen just like discord
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background-color: $bg-color;
+  z-index: 1;
+  transition: all 0.3s ease-in-out;
+  // transform: translateX(100%);
+  // &.active {
+  //   transform: translateX(0);
+  // }
+  .userList__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid #333;
+    .userList__header__title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .userList__header__close {
+      cursor: pointer;
+      font-size: 20px;
+      color: #fff;
+      &:hover {
+        color: $button-hover;
+      }
+    }
+  }
+}

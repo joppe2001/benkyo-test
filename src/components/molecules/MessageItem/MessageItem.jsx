@@ -86,8 +86,7 @@ const MessageItem = ({ message, serverId, editMessage, onDelete }) => {
     <div className={styles.messageItem}>
       <div className={styles.userName}>
         {displayName}
-        <span className={styles.timeStamp}>
-          {extractTime(message.timestamp)}
+        <span className={styles.timeStamp}> {extractTime(message.timestamp)}
         </span>
       </div>
       <div className={styles.messageContent}>
