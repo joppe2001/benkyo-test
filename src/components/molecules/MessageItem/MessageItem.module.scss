@@ -1,0 +1,59 @@
+$bg-color: #242424;
+$primary-color: #e54b4b;
+$input-bg-color: #3a3a3a;
+$button-hover: #f56565;
+$header-height: 60px;
+
+.messageItem {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background-color: $input-bg-color;
+  color: white;
+  max-width: 70%;
+  align-self: flex-end; // Adjust this for messages from other users
+  margin: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+
+  .messageContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+
+    .textContent {
+      // Styles for the text content
+      flex-grow: 1; // Allows the text content to take up available space
+      margin-right: 0.5rem; // Ensures some space between the text and the buttons
+    }
+
+    .settings {
+      display: flex;
+      gap: 0.5rem; // Space between buttons
+
+      button {
+        background-color: transparent;
+        border: none;
+
+        svg {
+          font-size: 1.2rem;
+        }
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+
+  .userName {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+
+  .timeStamp {
+    font-weight: 300;
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+}

@@ -1,4 +1,3 @@
-// create a login function for firebase auth with email and password anbd sugnup function
 import app from './config';
 import {
   getAuth,

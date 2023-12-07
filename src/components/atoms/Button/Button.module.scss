@@ -1,0 +1,19 @@
+$bg-color: #242424;
+$primary-color: #e54b4b;
+$input-bg-color: #3a3a3a;
+$button-hover: #f56565;
+$header-height: 60px;
+
+.button {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  background-color: $primary-color;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $button-hover;
+  }
+}

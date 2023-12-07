@@ -16,6 +16,11 @@ import {
   getUser
 } from "../../../firebase/db";
 
+import Button from "../../atoms/Button/Button";
+import InputField from "../../atoms/InputField/InputField";
+import MessageItem from "../../molecules/MessageItem/MessageItem";
+import UserList from "../../molecules/UserList/UserList";
+
 export const ServerView = () => {
   const { serverId } = useParams();
   const [server, setServer] = useState({});
@@ -172,15 +177,6 @@ export const ServerView = () => {
     }
   };
 
-  const handleEditMessage = (index) => {
-    setMessageState({ ...messageState, [index]: "editing" });
-  };
-
-  const saveEditedMessage = async (index, newContent, messageId) => {
-    await editMessage(serverId, messageId, newContent);
-    setMessageState({ ...messageState, [index]: "normal" });
-  };
-
   const handleDeleteMessage = async (index, messageId) => {
     await deleteMessage(serverId, messageId);
   };
@@ -212,124 +208,35 @@ export const ServerView = () => {
   return (
     <div className={styles.server}>
       {!subscribed && (
-        <button
-          onClick={() => handleJoin(serverId, userId.uid)}
-          key={server.serverName}
-          id={styles.joinButton}
-        >
+        <Button id={styles.joinButton} onClick={() => handleJoin(serverId, userId.uid)}>
           {subscribed ? "Joined" : "Join"}
-        </button>
+        </Button>
       )}
       <div className={styles.chat}>
         <div className={styles.messageContainer} ref={messageContainerRef}>
           {server.messages &&
             server.messages.map((msg, index) => (
-              <div key={msg.id} className={styles.messages}>
-                <strong className={styles.userName}>
-                  <div>
-                    {displayNames[msg.senderId] || "Unknown"}{" "}
-                    <span className={styles.timeStamp}>
-                      {extractTime(msg.timestamp)}
-                    </span>
-                  </div>
-                  <div className={styles.settings}>
-                    <button
-                      className={styles.delete}
-                      onClick={() => handleDeleteMessage(index, msg.id)}
-                    >
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='32'
-                        height='32'
-                        viewBox='0 0 24 24'
-                      >
-                        <path
-                          fill='currentColor'
-                          d='M8 9h8v10H8z'
-                          opacity='.3'
-                        />
-                        <path
-                          fill='currentColor'
-                          d='m15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z'
-                        />
-                      </svg>
-                    </button>
-                    {messageState[index] !== "editing" && (
-                      <button
-                        onClick={() => handleEditMessage(index)}
-                        className={styles.edit}
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width='32'
-                          height='32'
-                          viewBox='0 0 24 24'
-                        >
-                          <path
-                            fill='currentColor'
-                            d='M3 21h3.75L17.81 9.94l-3.75-3.75L3 17.25V21zm2-2.92l9.06-9.06l.92.92L5.92 19H5v-.92zM18.37 3.29a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34z'
-                          />
-                        </svg>
-                      </button>
-                    )}
-                  </div>
-                </strong>{" "}
-                {messageState[index] === "editing" ? (
-                  <input
-                    defaultValue={msg.content}
-                    onBlur={(e) =>
-                      saveEditedMessage(index, e.target.value, msg.id)
-                    }
-                  />
-                ) : messageState[index] === "deleted" ? (
-                  <em>Message deleted</em>
-                ) : (
-                  msg.content
-                )}
-              </div>
+              <MessageItem
+              key={msg.id}
+              message={msg}
+              serverId={serverId}
+              editMessage={editMessage} // Pass the editMessage function directly
+              onDelete={() => handleDeleteMessage(index, msg.id)}
+            />            
             ))}
           <div ref={messagesEndRef} />
         </div>
         <div className={styles.messageInput}>
-          <input
-            type='text'
+          <InputField
+            type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyPress}
-            placeholder='Type a message...'
+            placeholder="Type a message..."
           />
-          <button onClick={handleSendMessage}>Send</button>
+          <Button onClick={handleSendMessage}>Send</Button>
         </div>
-        <div
-          className={
-            isUsersVisible
-              ? styles.usersDisplay
-              : `${styles.usersDisplay} ${styles.childHidden}`
-          }
-        >
-          <button onClick={toggleUsersVisibility}>
-            {isUsersVisible ? "✖" : "👥"}
-          </button>
-          <div
-            className={
-              isUsersVisible
-                ? styles.contentWrapper
-                : `${styles.contentWrapper} ${styles.hidden}`
-            }
-          >
-            {isUsersVisible && (
-              <ul>
-                {users?.map((user) => {
-                  return (
-                    <li key={user?.displayName}>
-                      {user?.displayName || "placeholder Name"}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-        </div>
+        <UserList users={users} isVisible={isUsersVisible} toggleVisibility={toggleUsersVisibility} />
       </div>
     </div>
   );
