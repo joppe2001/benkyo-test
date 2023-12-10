@@ -18,7 +18,7 @@ import {
 import Button from "../../atoms/Button/Button";
 import InputField from "../../atoms/InputField/InputField";
 import MessageItem from "../../molecules/MessageItem/MessageItem";
-import UserList from "../../molecules/UserList/UserList";
+// import UserList from "../../molecules/UserList/UserList";
 
 export const ServerView = () => {
   const { serverId } = useParams();
@@ -172,7 +172,7 @@ export const ServerView = () => {
           />
           <Button onClick={handleSendMessage}>Send</Button>
         </div>
-        <UserList users={users} isVisible={isUsersVisible} toggleVisibility={toggleUsersVisibility} />
+        {/* <UserList users={users} isVisible={isUsersVisible} toggleVisibility={toggleUsersVisibility} /> */}
       </div>
     </div>
   );

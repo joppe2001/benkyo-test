@@ -54,13 +54,13 @@ const MainNav = () => {
             Home
           </Link>
         </li>
-        {history.map((item) => (
+        {/* {history.map((item) => (
           <li key={item.id} className={styles.navItem} onClick={toggleMenu}>
             <Link to={`/server/${item.id}`} className={styles.navLink}>
               {item.name}
             </Link>
           </li>
-        ))}
+        ))} */}
       </ul>
       <UserDisplayName onLogout={handleLogOut} />
     </div>
