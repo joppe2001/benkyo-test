@@ -28,8 +28,8 @@ export const ServerView = () => {
   const [subscribed, setSubscribed] = useState(
     localStorage.getItem(`subscribed_${serverId}`) === "true"
   );
-  const [users, setUsers] = useState([]);
-  const [isUsersVisible, setUsersVisibility] = useState(false);
+  // const [users, setUsers] = useState([]);
+  // const [isUsersVisible, setUsersVisibility] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -123,7 +123,6 @@ export const ServerView = () => {
     setSubscribed(hasSubscribed);
     localStorage.setItem(`subscribed_${serverId}`, hasSubscribed);
 
-    // Update subscribed status after joining
     setSubscribed(true);
   };
 
@@ -156,7 +155,7 @@ export const ServerView = () => {
               key={msg.id}
               message={msg}
               serverId={serverId}
-              editMessage={editMessage} // Pass the editMessage function directly
+              editMessage={editMessage}
               onDelete={() => handleDeleteMessage(index, msg.id)}
             />            
             ))}

@@ -10,7 +10,7 @@ const Form = ({
   alternButtons
 }) => {
   const handleDataCollection = (e) => {
-    e.preventDefault(); // Add this to prevent the default form submission behavior
+    e.preventDefault();
 
     const data = fields.reduce((acc, field) => {
       const inputElement = document.getElementById(field.name);

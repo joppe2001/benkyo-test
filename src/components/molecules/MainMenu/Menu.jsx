@@ -9,7 +9,7 @@ const MainNav = () => {
   const navigate = useNavigate();
   const navRef = useRef(null);
   const location = useLocation();
-  const [history, setHistory] = useState([]);
+  // const [history, setHistory] = useState([]);
 
   const handleLogOut = () => {
     logOut().then(() => {

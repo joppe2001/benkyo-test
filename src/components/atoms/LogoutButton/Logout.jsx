@@ -6,9 +6,7 @@ export const Logout = () => {
     <div className={styles.logOut}>
       {isLoggedIn ? (
         <>
-          {/* eslint-disable-next-line no-undef */}
           <span>Welcome, {userName}</span>
-          {/* eslint-disable-next-line no-undef */}
           <button onClick={handleLogout}>Log Out</button>
         </>
       ) : (
